@@ -725,7 +725,7 @@ function AvatarEditorPopover({
       {tab === "icon" ? (
         <div className="p-3 space-y-3">
           <div>
-            <p className="text-[10px] uppercase tracking-wider text-muted-foreground mb-2 font-medium">Icon</p>
+            <p className="text-[10px] uppercase tracking-wider text-muted-foreground mb-2 font-medium">{t("agents:detail.iconLabel")}</p>
             <div className="grid grid-cols-8 gap-1 max-h-56 overflow-y-auto pr-1">
               {ICON_PICKER_KEYS.map((key) => {
                 const IconComp = ICON_CATALOG[key];
@@ -1455,7 +1455,7 @@ function ScheduleSection({
             type="button"
             onClick={onEditHeartbeat}
             className="flex flex-1 items-center gap-3 text-left"
-            title="Edit heartbeat"
+            title={t("agents:workspace.editHeartbeat")}
           >
             <Zap className={cn("h-3.5 w-3.5 shrink-0", heartbeatEffective ? "text-amber-500" : "text-muted-foreground/40")} />
             <span className={cn("flex-1 text-[13px]", !heartbeatEffective && "text-muted-foreground/60")}>{t("agents:detail.heartbeat")}</span>

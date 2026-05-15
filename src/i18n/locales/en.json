@@ -10,7 +10,12 @@
       "departmentLead": "Department Lead",
       "provider": "Provider",
       "runtime": "Runtime",
-      "promptPlaceholder": "You are a marketing agent for…"
+      "promptPlaceholder": "You are a marketing agent for…",
+      "addAgentTitle": "Add an agent to your team",
+      "addAgentDescription": "Pick a specialist from the library. You can edit its name, role, and instructions after it's added.",
+      "searchLibraryPlaceholder": "Search the library",
+      "errorLoadLibrary": "Couldn't load the agent library.",
+      "errorAddAgent": "Couldn't add this agent."
     },
     "metric": {
       "name": "Metric name",
@@ -47,7 +52,17 @@
       "sharedAcrossCabinets": "Shared across all cabinets",
       "expandSchedule": "Expand schedule",
       "heartbeatsOnAgentPage": "Heartbeats are configured on each agent's page",
-      "exitFullscreen": "Exit fullscreen"
+      "exitFullscreen": "Exit fullscreen",
+      "refresh": "Refresh",
+      "editHeartbeat": "Edit heartbeat",
+      "newRoutine": "New Routine",
+      "configureHeartbeat": "Configure heartbeat",
+      "openOrgChart": "Open org chart",
+      "orgChart": "Org chart",
+      "pickAnAgent": "Pick an agent",
+      "dismiss": "Dismiss",
+      "lockedHeartbeatTip": "This agent is stopped. Start it on the Agents tab to enable the heartbeat.",
+      "lockedRoutineTip": "This agent is stopped. Start it on the Agents tab to enable its routines."
     },
     "detail": {
       "clickToTurnOff": "Click to turn off.",
@@ -76,7 +91,8 @@
       "notInCatalog": "Not found in catalog — click to remove",
       "recommendedForRole": "Recommended for this role — click to attach",
       "promise": "Promise",
-      "saved": "Saved"
+      "saved": "Saved",
+      "iconLabel": "Icon"
     },
     "missionControl": {
       "gallery": "Gallery",
@@ -135,7 +151,28 @@
     "createTask": "Create a new task",
     "moreNewTypes": "More new item types",
     "newTask": "New Task",
-    "newRoutine": "New Routine"
+    "newRoutine": "New Routine",
+    "viewKanban": "Kanban",
+    "viewList": "List",
+    "viewSchedule": "Schedule",
+    "filterByAgent": "Filter by agent: {{name}}",
+    "noToDeleteTitle": "No tasks to delete",
+    "noToDeleteFiltered": "Nothing matches {{filter}}. Clear the filter, pick another view, or create a new task.",
+    "noToDeleteEmpty": "There are no tasks on the board yet. Create one with the + New Task button.",
+    "gotIt": "Got it",
+    "deleteCountTitle": "Delete {{count}} task?",
+    "deleteCountTitlePlural": "Delete {{count}} tasks?",
+    "deleteBody": "This permanently removes conversation meta, transcripts, and artifacts for every task currently shown. This can't be undone.",
+    "deleteBodyFiltered": "This permanently removes conversation meta, transcripts, and artifacts for every task currently shown by the active filters. This can't be undone.",
+    "deleteConfirm": "Delete {{count}}",
+    "deleteAllShown": "Delete all {{count}} shown task",
+    "deleteAllShownPlural": "Delete all {{count}} shown tasks",
+    "nothingToDelete": "Nothing to delete in this view",
+    "deleteAllAria": "Delete all shown tasks",
+    "noTasksAria": "No tasks in this view",
+    "filterTrigger": "the {{trigger}} filter",
+    "filterTriggerAndAgent": "the {{trigger}} filter and selected agent",
+    "filterSelectedAgent": "the selected agent filter"
   },
   "runtime": {
     "noProvider": "No provider selected",
@@ -145,7 +182,24 @@
     "native": "Native",
     "terminal": "Terminal",
     "terminalTitle": "Run the CLI in a live PTY terminal session (experimental hacker mode)",
-    "providers": "Providers"
+    "providers": "Providers",
+    "modelCol": "Model",
+    "auto": "Auto",
+    "ready": "Ready",
+    "loginRequired": "Log in",
+    "notInstalled": "Not installed",
+    "notAvailable": "Not available",
+    "defaultLabel": "Default",
+    "noProvidersAvailable": "No providers available",
+    "appDefault": "App default",
+    "selectAppDefault": "Select app default",
+    "defaultModel": "Default model",
+    "selectedModelLabel": "Selected Model",
+    "loadingProviders": "Loading providers...",
+    "loadingAvailableProviders": "Loading available providers…",
+    "triggerSummary": "Model: {{model}} · Effort: {{effort}} · via {{provider}}",
+    "triggerSystemDefault": "Task model — using system default (click to pick)",
+    "clickToLaunch": "Click to launch {{name}} in a PTY terminal"
   },
   "breakingChanges": {
     "agentsFullAccess": "Agents run with full access.",
@@ -156,7 +210,8 @@
   "skillAdd": {
     "addSkill": "Add skill",
     "auditTooltip": "Result from skills.sh's external audits (Alibaba Threat Hunter, Socket, Snyk, zeroleaks)",
-    "auditUnavailable": "skills.sh audit data isn't available for this skill"
+    "auditUnavailable": "skills.sh audit data isn't available for this skill",
+    "preview": "Preview"
   },
   "help": {
     "page": {
@@ -193,7 +248,18 @@
     "stopAllInLane": "Stop all running tasks in this lane",
     "restartAllInLane": "Restart all tasks in this lane",
     "newTask": "New task",
-    "collapseColumn": "Collapse column"
+    "collapseColumn": "Collapse column",
+    "kill": "Kill",
+    "laneInbox": "Inbox",
+    "laneInboxHint": "Drafted — waiting for you to start",
+    "laneNeeds": "Your turn",
+    "laneNeedsHint": "Agent asked a question or needs approval",
+    "laneRunning": "Running",
+    "laneRunningHint": "Agents working right now",
+    "laneDone": "Just Finished",
+    "laneDoneHint": "Completed in the last hour",
+    "laneArchive": "Archive",
+    "laneArchiveHint": "Older and acknowledged"
   },
   "terminalTabs": {
     "newTab": "New terminal tab",
@@ -226,7 +292,10 @@
     "readOnly": "Read-only — cannot edit from Cabinet",
     "noUpstream": "Authored directly in this cabinet — no upstream git source recorded",
     "executableWarning": "Bundle includes executable scripts — review before approving",
-    "skills": "Skills"
+    "skills": "Skills",
+    "imported": "Imported",
+    "importing": "Importing…",
+    "import": "Import"
   },
   "embedPopover": {
     "placeholder": "Paste a link (YouTube, X, Vimeo, Loom, TikTok, Facebook, Instagram, Spotify, or any URL)",
@@ -248,6 +317,14 @@
     "heartbeats": "Heartbeats",
     "noHeartbeats": "No heartbeats configured yet."
   },
+  "scheduleTab": {
+    "explainer1": "Everything your team is doing this week, on one calendar. Pink is a heartbeat, green is a routine. Click any pill to edit it.",
+    "explainer2": "Use this tab to spot conflicts, find quiet stretches, or just see at a glance how busy the team is.",
+    "aboutAria": "About the schedule",
+    "modeDay": "Day",
+    "modeWeek": "Week",
+    "modeMonth": "Month"
+  },
   "mermaidViewer": {
     "zoomOut": "Zoom out",
     "zoomIn": "Zoom in",
@@ -258,7 +335,72 @@
     "keyboard": "Keyboard",
     "skills": "Skills",
     "apiKeys": "API keys",
-    "mcpServers": "MCP servers"
+    "mcpServers": "MCP servers",
+    "title": "Help",
+    "howTo": "How To",
+    "heading": "Learn how Cabinet works",
+    "subheading": "Short demos, walkthroughs, and previews for getting the most out of Cabinet.",
+    "ctaWatchTour": "Watch the tour",
+    "ctaWatchDemo": "Watch the demo",
+    "ctaCheatSheet": "Open cheat sheet",
+    "ctaComingSoon": "Coming soon",
+    "discordHeading": "Didn't find what you're looking for?",
+    "discordSubheading": "We're in the Discord — come say hi, ask questions, share what you're building.",
+    "discordCta": "Join the Discord",
+    "items": {
+      "tour": {
+        "title": "Meet your <accent>Cabinet</accent>.",
+        "description": "Your AI team. Your knowledge base. One place."
+      },
+      "agents": {
+        "title": "Your <accent>AI team</accent>.",
+        "description": "Hire leads and specialists. Group them into departments. Let them dispatch work to each other."
+      },
+      "tasks": {
+        "title": "The <accent>task board</accent>.",
+        "description": "Kanban, list, and schedule views. Filter by agent or status. Pick a runtime per task."
+      },
+      "knowledge": {
+        "title": "Your <accent>knowledge base</accent>.",
+        "description": "Markdown, CSV, PDF, code, notebooks, mermaid, images, audio — everything renders inline. Your data stays on your machine; it's yours, not ours."
+      },
+      "cabinets": {
+        "title": "A team of <accent>AI teams</accent>.",
+        "description": "Cabinets nest inside cabinets. Each one is its own AI team with its own data, agents, and visibility scope — and they can collaborate up and down the tree."
+      },
+      "routines": {
+        "title": "<accent>Routines</accent> & schedules.",
+        "description": "Run a task daily at 9am, weekly on Friday, or once next Monday. Cron, calendar, or natural language."
+      },
+      "conversations": {
+        "title": "Conversations & <accent>approvals</accent>.",
+        "description": "Agents propose actions — launch a task, schedule a job — and you approve before anything runs."
+      },
+      "themes": {
+        "title": "Make it <accent>yours</accent>.",
+        "description": "Pick from a curated set of light and dark themes — Paper, Slate, Claude, Ink, and more."
+      },
+      "providers": {
+        "title": "<accent>BYOAI</accent> — bring your own AI.",
+        "description": "Claude, GPT, Gemini, Grok, Codex, Cursor — bring whichever providers you already pay for. Pick a default, or override per task."
+      },
+      "shortcuts": {
+        "title": "<accent>Keyboard</accent> shortcuts.",
+        "description": "Every Cabinet shortcut on one searchable card. Press ? from anywhere to reopen it. Filter by name or key — passes for navigation, editing, tasks, panels, and slash commands."
+      },
+      "skills": {
+        "title": "<accent>Skills</accent> for your agents.",
+        "description": "Installable Agent Skills — playbooks the model pulls in for a task. Install from GitHub or skills.sh, attach to a persona, or @-mention one in any composer for a single run."
+      },
+      "apiKeysItem": {
+        "title": "<accent>API keys</accent> for your tools.",
+        "description": "Plug in your OpenAI, Anthropic, or GitHub account once — every agent and skill in Cabinet will use it. You pay your own bills, use your own quota, no middleman."
+      },
+      "integrations": {
+        "title": "<accent>MCP servers</accent> & integrations.",
+        "description": "MCP servers, Slack, Telegram, Gmail, and Calendar OAuth — connect once and Cabinet handles the tokens. Coming soon."
+      }
+    }
   },
   "keyboardShortcuts": {
     "title": "Keyboard shortcuts",
@@ -305,15 +447,96 @@
     "editor": "Editor",
     "slashMenu": "Slash menu"
   },
+  "slideDataCopy": {
+    "slideNum": "01 · DATA",
+    "headlineSentence": "Your <accent>single source</accent> of truth.",
+    "paragraphPrefix": "Markdown, PDFs, spreadsheets, slides, images, video, audio, linked repos, embedded web apps, Google Docs. Mention any of it with ",
+    "paragraphSuffix": ".",
+    "secondParagraphPrefix": "One place for everything — so you and your AI team read, edit, and ship from the ",
+    "sameFiles": "same files",
+    "secondParagraphSuffix": ", not copies of copies.",
+    "mockTitle": "Hila's Cabinet"
+  },
+  "slideData": {
+    "thailandRootLabel": "Thailand Trip",
+    "thailandCaption": "View all your files in one place.",
+    "videoTitle": "Night market.mp4",
+    "taxRootLabel": "Tax 2026",
+    "taxCaption": "Tax 2026 — a live calculator web app, embedded right in your cabinet.",
+    "calculatorTitle": "Calculator",
+    "liveAppBadge": "Live app",
+    "taxEstimateLabel": "2026 tax estimate",
+    "income": "Income",
+    "deductions": "Deductions",
+    "taxBracket": "Tax bracket",
+    "estimatedTax": "Estimated tax",
+    "healthRootLabel": "Health",
+    "healthCaption": "Vitamins & labs — a spreadsheet that feels like a page.",
+    "csvTitle": "Daily vitamins.csv",
+    "csvColVitamin": "Vitamin",
+    "csvColDose": "Dose",
+    "csvColTime": "Time",
+    "csvColDone": "Done",
+    "repoRootLabel": "cabinet-repo",
+    "repoCaption": "Codebases — link any Git repo, searchable by your agents.",
+    "schemaTitle": "schema.ts",
+    "tsBadge": "TS"
+  },
+  "slideTasks": {
+    "slideNum": "03 · TASKS",
+    "typedCommand": "Run 10 tasks, each writing a song, save to @Songs/",
+    "headlineSentence": "Ready to <accent>start</accent>?",
+    "paragraphPrefix": "Write a task. Run one, run ten, schedule them forever. Mention pages with ",
+    "paragraphSuffix": ", save output wherever you want. You're the director now.",
+    "savingFolder": "Songs/"
+  },
   "slideAgents": {
     "persona": "Persona",
     "heartbeat": "Heartbeat",
     "jobs": "Jobs",
-    "aiTeam": "AI team"
+    "aiTeam": "AI team",
+    "otherWriter": "Writer",
+    "otherOrganizer": "Organizer",
+    "idle": "idle",
+    "researchAnalyst": "Research Analyst",
+    "modelLine": "Claude · Sonnet 4.6",
+    "live": "live",
+    "personaBody": "\"Rigorous analyst. Cites sources. Flags conflicting claims.\"",
+    "heartbeatBody": "Scans @Market Research every 15 min",
+    "jobsBody": "Mon 9:00 · Weekly competitor digest",
+    "slideNum": "02 · AGENTS",
+    "paragraphPrefix": "Each agent has a ",
+    "personaWord": "persona",
+    "paragraphMiddle": ", its own ",
+    "scheduleWord": "schedule",
+    "paragraphMiddle2": ", and a ",
+    "memoryWord": "memory",
+    "paragraphSuffix": ". Your AI agents get the work done, 24/7. Go be human — they'll handle the rest.",
+    "aiTeamSentence": "Your <accent>AI team</accent>."
   },
   "startWork": {
     "close": "Close",
-    "selectAgent": "Select agent"
+    "selectAgent": "Select agent",
+    "titleNow": "What needs to get done?",
+    "titleRecurring": "Set up a recurring routine",
+    "titleHeartbeat": "Wake this agent on a schedule",
+    "submitStart": "Start",
+    "submitAddInbox": "Add to Inbox",
+    "submitCreateRoutine": "Create routine",
+    "submitSaveHeartbeat": "Save heartbeat",
+    "saving": "Saving…",
+    "current": "current",
+    "modeInboxLabel": "→ Inbox",
+    "modeInboxHint": "Save to Inbox — start it when you're ready",
+    "modeNowLabel": "Run now",
+    "modeNowHint": "Start this conversation right away",
+    "modeRecurringLabel": "On a schedule",
+    "modeRecurringHint": "Run this prompt on a schedule",
+    "modeHeartbeatLabel": "Heartbeat",
+    "modeHeartbeatHint": "Wake the agent on its own rhythm",
+    "agentFallback": "Agent",
+    "failedToStart": "Failed to start",
+    "failedToSaveHeartbeat": "Failed to save heartbeat"
   },
   "googleDoc": {
     "noUrl": "No Google URL set",
@@ -323,7 +546,32 @@
   "feedback": {
     "close": "Close",
     "rolePlaceholder": "e.g. indie hacker, PM at a SaaS, design student, hobbyist…",
-    "joinDiscord": "Join the Discord"
+    "joinDiscord": "Join the Discord",
+    "header": "Quick check-in from Hila",
+    "howGoing": "How's it going so far?",
+    "starsCount": "{{n}} star",
+    "starsCountPlural": "{{n}} stars",
+    "likeCabinet": "Like Cabinet?",
+    "starTooltipUnknown": "Star Cabinet on GitHub — if it's useful to you, a star really helps",
+    "starTooltipWithCount": "{{count}} GitHub stars — click to add yours",
+    "starLabel": "Star",
+    "backgroundLabel": "What's your background?",
+    "optional": "(optional)",
+    "discordCta": "Want to talk directly, or hang with other Cabinet members?",
+    "maybeLater": "Maybe later",
+    "send": "Send",
+    "thanksTitle": "Thanks!",
+    "thanksBody": "Your feedback shapes what gets built next.",
+    "copy2Lead": "You've opened Cabinet a couple of times. Thank you! Cabinet is open source and just getting started, so what you say here actually changes what gets built next.",
+    "copy2Q1": "What were you trying to do in Cabinet today?",
+    "copy2Q1Hint": "One sentence is fine. What you opened it for, not what you wished it could do.",
+    "copy2Q2": "Last time you wanted to do that, what did you use instead of Cabinet?",
+    "copy2Q2Hint": "Any tool, app, or doc, even pen and paper.",
+    "copy6Lead": "You're back, and that's the signal that matters most. I want to hear about the rough edges before you forget them.",
+    "copy6Q1": "What were you trying to do in Cabinet today?",
+    "copy6Q1Hint": "One sentence is fine.",
+    "copy6Q2": "What's the one thing that almost made you stop using Cabinet this week?",
+    "copy6Q2Hint": "The thing that bugged you most. Be specific. \"X was confusing\" beats \"the UX\"."
   },
   "apiKeysSection": {
     "cancel": "Cancel",
@@ -347,7 +595,8 @@
   "treeNode": {
     "openCabinet": "Open cabinet view",
     "pageTitlePlaceholder": "Page title…",
-    "rename": "Rename"
+    "rename": "Rename",
+    "openBadge": "Open"
   },
   "boardSkeleton": {
     "loadingTasks": "Loading tasks"
@@ -355,6 +604,33 @@
   "agentList": {
     "agentLibrary": "Agent Library",
     "newAgent": "New Agent"
+  },
+  "helpVisuals": {
+    "cabinet": "Cabinet",
+    "yourTeam": "Your team",
+    "lead": "Lead",
+    "specialist": "Specialist",
+    "tasks": "Tasks",
+    "todo": "Todo",
+    "doing": "Doing",
+    "done": "Done",
+    "anythingGoes": "Anything goes",
+    "marketing": "Marketing",
+    "product": "Product",
+    "research": "Research",
+    "design": "Design",
+    "routines": "Routines",
+    "dailyReview": "Daily review",
+    "weeklyDigest": "Weekly digest",
+    "conversation": "Conversation",
+    "userQuery": "Plan a 2-week Thailand trip…",
+    "agentReply": "I'll dispatch the librarian and editor.",
+    "pendingAction": "Pending action",
+    "approve": "Approve",
+    "decline": "Decline",
+    "themes": "Themes",
+    "providers": "Providers",
+    "comingSoon": "Coming soon"
   },
   "agentLive": {
     "dismiss": "Dismiss",
@@ -419,14 +695,33 @@
   },
   "narrowViewport": {
     "dismiss": "Dismiss narrow viewport hint",
-    "dismissTitle": "Dismiss until next session"
+    "dismissTitle": "Dismiss until next session",
+    "hintPrefix": "Cabinet is best at ",
+    "hintWidth": "≥960 px",
+    "hintSuffix": " wide. Some surfaces cramp at narrower widths."
   },
   "agentCard": {
     "runHeartbeat": "Run heartbeat"
   },
   "schedulePicker": {
     "frequency": "Frequency",
-    "onDay": "On day"
+    "onDay": "On day",
+    "modeInterval": "Interval",
+    "modeDaily": "Daily",
+    "modeWeekdays": "Weekdays",
+    "modeWeekly": "Weekly",
+    "modeMonthly": "Monthly",
+    "modeCustom": "Custom",
+    "parse": "Parse",
+    "showCron": "Show cron expression",
+    "hideCron": "Hide cron expression",
+    "weekdayMo": "Mo",
+    "weekdayTu": "Tu",
+    "weekdayWe": "We",
+    "weekdayTh": "Th",
+    "weekdayFr": "Fr",
+    "weekdaySa": "Sa",
+    "weekdaySu": "Su"
   },
   "slackPanel": {
     "createChannel": "Create channel",
@@ -474,7 +769,19 @@
     "noRecentActivity": "No recent activity",
     "noAgents": "No agents",
     "noAgentsConfigured": "No agents configured for this cabinet yet.",
-    "cabinetScope": "Cabinet scope:"
+    "cabinetScope": "Cabinet scope:",
+    "depthDropdownHeader": "Cabinet scope",
+    "depthOwnLabel": "This cabinet only",
+    "depthOwnShort": "Own",
+    "depthOwnDesc": "Pages, agents, and tasks from this cabinet only.",
+    "depthChildren1Label": "Include direct children",
+    "depthChildren1Desc": "Add one level of sub-cabinets.",
+    "depthChildren2Label": "Include two cabinet levels",
+    "depthChildren2Desc": "Add two levels of sub-cabinets.",
+    "depthAllLabel": "Include all descendants",
+    "depthAllShort": "All",
+    "depthAllDesc": "Include the entire sub-tree.",
+    "scopeTooltip": "Cabinet scope: {{label}}. Click to change."
   },
   "composerExtras": {
     "skillAttached": "Skill — attached to this run only",
@@ -492,7 +799,9 @@
     "aiTeams": "AI teams"
   },
   "whatsNew": {
-    "dismiss": "Dismiss"
+    "dismiss": "Dismiss",
+    "headerPrefix": "What's new in v",
+    "readFull": "Read full release notes"
   },
   "breakingChangesPlus": {
     "iUnderstand": "I understand and want to continue."
@@ -657,11 +966,40 @@
       "namePlaceholder": "Cabinet name…",
       "renameWarning": "Cabinet names can't be renamed later (for now). Choose wisely."
     },
+    "templates": {
+      "header": "Start from a template",
+      "browseAll": "Browse all →"
+    },
     "quickActions": {
-      "shuffle": "Show different suggestions"
-    }
+      "shuffle": "Show different suggestions",
+      "launch10Songs": "Launch 10 song-writing editors",
+      "dailyReview9am": "Daily review at 9am",
+      "weeklyReview": "Weekly review next Monday",
+      "thailandTrip": "Plan my Thailand trip",
+      "physicsApp": "Build me a physics study app",
+      "summariseRecent": "Summarise my recent work",
+      "recruiterReply": "Draft a recruiter reply",
+      "mapArticles": "Map article connections",
+      "physicsCourse": "Spin up a 6-module physics course",
+      "shortStory": "Outline a short story",
+      "hourlyStandup": "Hourly stand-up nudge",
+      "researchPhone": "Research my next phone",
+      "translateToSpanish": "Translate this cabinet to Spanish",
+      "refactorNotes": "Refactor my note-taking system",
+      "birthdayParty": "Plan a birthday party",
+      "boardUpdate": "Draft a board update",
+      "customerInterviews": "Simulate 5 customer interviews"
+    },
+    "goodMorning": "Good morning",
+    "goodAfternoon": "Good afternoon",
+    "goodEvening": "Good evening",
+    "greetingWithName": "{{greeting}}, {{name}}.",
+    "greetingNoName": "{{greeting}}.",
+    "composerPlaceholder": "I want to create...",
+    "composerDaemonDown": "Agent daemon offline — restart to send"
   },
   "onboarding": {
+    "launchHeading": "Start your <accent>Cabinet</accent>",
     "intro": {
       "tagline1": "Your knowledge base.",
       "tagline2": "Your AI team.",
@@ -722,6 +1060,8 @@
       "description": "Changes language and reading direction. Existing pages keep their per-document direction.",
       "english": "English",
       "hebrew": "עברית",
+      "chineseSimplified": "简体中文",
+      "chineseTraditional": "繁體中文",
       "moreLanguages": "More languages",
       "moreLanguagesHint": "Click any to tell us you'd like Cabinet in that language — we'll prioritize the most-requested ones.",
       "comingSoon": "Coming soon",
@@ -739,7 +1079,9 @@
       "lightVariant": "Light variant",
       "darkVariant": "Dark variant",
       "sidebar": "Sidebar",
-      "showHiddenFiles": "Show hidden files"
+      "showHiddenFiles": "Show hidden files",
+      "sidebarDescription": "Configure how files are displayed in the sidebar.",
+      "showHiddenFilesHint": "Display files and folders starting with a dot (e.g. .env, .git)"
     },
     "tabs": {
       "profile": "Profile",
@@ -752,6 +1094,13 @@
       "updates": "Updates",
       "about": "About"
     },
+    "page": {
+      "title": "Settings",
+      "refresh": "Refresh",
+      "groupYou": "You",
+      "groupWorkspace": "Workspace",
+      "groupApp": "App"
+    },
     "common": {
       "copyToClipboard": "Copy to clipboard",
       "categoriesAriaLabel": "Settings categories",
@@ -761,7 +1110,20 @@
     },
     "storage": {
       "dataDirectory": "Data Directory",
-      "restartRequired": "Restart required"
+      "restartRequired": "Restart required",
+      "dataDirectoryDescription": "All Knowledge Base content is stored in this directory. Changing the path requires a restart.",
+      "restartHint": "The data directory will change after you restart Cabinet.",
+      "currentPath": "Current path",
+      "loadingPath": "Loading...",
+      "changeDirectory": "Change directory",
+      "directoryPlaceholder": "/path/to/data",
+      "browse": "Browse",
+      "save": "Save",
+      "openInFinder": "Open in Finder",
+      "envVarHint1": "You can also set the ",
+      "envVarHint2": " environment variable, which takes priority over this setting.",
+      "failedToSave": "Failed to save.",
+      "failedToSaveDir": "Failed to save data directory."
     },
     "updates": {
       "checking": "Checking for Cabinet updates…"
@@ -769,14 +1131,43 @@
     "providers": {
       "title": "Agent Providers",
       "defaultModel": "Default Model",
-      "setupGuide": "Setup guide"
+      "setupGuide": "Setup guide",
+      "troubleshoot": "Troubleshoot AI providers",
+      "subtitle": "Configure AI agent providers. CLI agents run via terminal, API agents use direct API calls.",
+      "defaultRuntime": "Default runtime",
+      "defaultRuntimeHint": "General conversations and fallback runs use this provider/model/effort.",
+      "cliAgents": "CLI Agents",
+      "apiAgents": "API Agents",
+      "ready": "Ready",
+      "installedNotLoggedIn": "Installed but not logged in",
+      "notInstalled": "Not installed",
+      "emptyMatrix": "No providers are configured. Add one below."
     },
     "notifications": {
       "channels": "Notification Channels",
       "alertRules": "Alert Rules",
       "alwaysOn": "Always on",
       "comingSoon": "Coming Soon",
-      "emailPlaceholder": "you@company.com"
+      "emailPlaceholder": "you@company.com",
+      "channelsHint": "Configure how you receive alerts when agents need your attention.",
+      "rulesHint": "Notifications are triggered automatically for these events:",
+      "previewHint": "Browser push, Telegram, Slack, and email notifications.",
+      "channelPushName": "Browser Push",
+      "channelPushDesc": "Instant alerts when Cabinet tab is open or PWA installed",
+      "channelTelegramName": "Telegram",
+      "channelTelegramDesc": "Instant mobile notifications via Telegram bot",
+      "channelSlackName": "Slack Webhook",
+      "channelSlackDesc": "Forward alerts to your team's Slack channel",
+      "channelEmailName": "Email Digest",
+      "channelEmailDesc": "Batched summary of alerts and agent activity",
+      "ruleAlertsEvent": "#alerts channel messages",
+      "ruleAlertsDesc": "Any agent posting to the alerts channel",
+      "ruleMentionsEvent": "@human mentions",
+      "ruleMentionsDesc": "When an agent mentions @human in any channel",
+      "ruleFloorEvent": "Goal floor breached",
+      "ruleFloorDesc": "A goal drops below its minimum threshold",
+      "ruleHealthEvent": "Agent health degraded",
+      "ruleHealthDesc": "3+ consecutive heartbeat failures"
     },
     "about": {
       "cabinet": "Cabinet",
@@ -785,7 +1176,27 @@
       "framework": "Framework",
       "storage": "Storage",
       "privacy": "Privacy",
-      "telemetry": "Anonymous usage telemetry"
+      "telemetry": "Anonymous usage telemetry",
+      "tagline": "AI-first self-hosted knowledge base and startup OS.",
+      "frameworkValue": "Next.js (App Router)",
+      "storageValue": "Local filesystem",
+      "aiLabel": "AI",
+      "aiValue": "Powered by local AI CLIs",
+      "philosophy": "All content lives as markdown files on disk. Humans define intent. Agents do the work. The knowledge base is the shared memory between both.",
+      "privacyBody": "Cabinet sends anonymous usage telemetry to help us improve the product. No file contents, paths, prompts, or secrets are collected.",
+      "privacyLink": "What's collected?",
+      "telemetryEnvDisabled": "Disabled by CABINET_TELEMETRY_DISABLED=1 (env var).",
+      "telemetryHint": "Event counts, versions, and platform info only. Toggle off to stop sending.",
+      "cabinetCloud": "Cabinet Cloud",
+      "cloudBody": "Connect to your Cabinet from anywhere, while your AI team works 24/7 for you. Drop your email below and we'll let you know when Cabinet Cloud opens up.",
+      "cloudAlready": "You're already on the list — we'll be in touch.",
+      "cloudSuccess": "You're on the list. We'll email you when Cabinet Cloud opens up.",
+      "cloudSending": "Sending…",
+      "cloudJoinWaitlist": "Join waitlist",
+      "cloudError": "Something went wrong. Check the email and try again.",
+      "connectTitle": "Connect",
+      "connectBody": "Get help, share feedback, or just say hi.",
+      "joinDiscord": "Join the Discord"
     },
     "profile": {
       "title": "Profile",
@@ -800,7 +1211,18 @@
       "fallbackIcon": "Fallback icon",
       "useIconInstead": "Use icon instead",
       "searchAvatars": "Search avatars…",
-      "searchIcons": "Search icons…"
+      "searchIcons": "Search icons…",
+      "howAppear": "How you appear in conversations and across the app.",
+      "youFallback": "You",
+      "displayNameHint": "Shown in conversations. Defaults to Name.",
+      "iconHint": "Used when no avatar image is set. Click again to clear.",
+      "tintHint": "Tints the fallback avatar when no image is set.",
+      "save": "Save",
+      "saving": "Saving…",
+      "saved": "Saved",
+      "browseAll": "Browse all ({{count}})",
+      "showFavorites": "Show favorites",
+      "showFewer": "Show fewer"
     },
     "workspace": {
       "title": "Workspace",
@@ -809,7 +1231,8 @@
       "description": "Description",
       "descriptionPlaceholder": "What do you do?",
       "teamSize": "Team size",
-      "teamSizePlaceholder": "Solo / 2–5 / 6–20 / 20+"
+      "teamSizePlaceholder": "Solo / 2–5 / 6–20 / 20+",
+      "subtitle": "Captured during onboarding. Agents read these when planning work."
     }
   },
   "sidebar": {
@@ -824,6 +1247,9 @@
     "agents": "Agents",
     "tasks": "Tasks",
     "missions": "Missions",
+    "drawerData": "Data",
+    "drawerAgents": "Agents",
+    "drawerTasks": "Tasks",
     "goHome": "Go to home",
     "refresh": "Refresh sidebar",
     "refreshDescription": "Refresh sidebar (re-read data folder)",
@@ -904,7 +1330,36 @@
       "discordSubtitle": "Support and feedback",
       "github": "Contribute on GitHub",
       "githubSubtitle": "Source, issues, PRs",
-      "ifUseful": "If you find it useful"
+      "ifUseful": "If you find it useful",
+      "label": "Help"
+    },
+    "git2": {
+      "allCommitted": "All committed",
+      "uncommittedFile": "{{count}} uncommitted file",
+      "uncommittedFiles": "{{count}} uncommitted files",
+      "uncommittedFilesAria": "{{count}} uncommitted file{{plural}} — click to see the list",
+      "uncommittedFileTip": "Click to see uncommitted file",
+      "uncommittedFilesTip": "Click to see uncommitted files",
+      "uncommittedFilesHeading": "{{count}} uncommitted file",
+      "uncommittedFilesHeadingPlural": "{{count}} uncommitted files",
+      "truncatedHint": "Only the first {{count}} files shown — run `git status` for the full list.",
+      "commitDefault": "Update {{count}} file",
+      "commitDefaultPlural": "Update {{count}} files",
+      "committing": "Committing…",
+      "commit": "Commit",
+      "commitFailed": "Commit failed",
+      "sync": "Sync",
+      "syncTitle": "Pull latest from GitHub & refresh",
+      "syncTitleWithLast": "Pull latest from GitHub & refresh. Last synced {{when}}.",
+      "syncAriaLabel": "Pull latest changes from GitHub and refresh",
+      "syncAriaLabelWithLast": "Pull latest changes from GitHub and refresh. Last synced {{when}}.",
+      "terminal": "Terminal",
+      "openTerminal": "Open terminal",
+      "newTerminalTab": "New terminal tab"
+    },
+    "update2": {
+      "updateAvailable": "Update {{version}} available",
+      "updateAvailableTip": "Cabinet {{version}} is available"
     },
     "common": {
       "dismiss": "Dismiss",
@@ -942,6 +1397,10 @@
     "next": "Next",
     "writeFirstTask": "Write your first task",
     "goToSlide": "Go to slide {{n}}",
-    "starterTask": "Let's talk through my goals and what I want to achieve here, then capture it in a new About page."
+    "starterTask": "Let's talk through my goals and what I want to achieve here, then capture it in a new About page.",
+    "savingTo": "Saving to ",
+    "introTitle": "Meet your <accent>Cabinet</accent>.",
+    "introSubtitle": "Your AI team. Your knowledge base. One place.",
+    "cabinetTitle": "Cabinet"
   }
 }
