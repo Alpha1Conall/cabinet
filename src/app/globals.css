@@ -1218,3 +1218,13 @@ html[data-custom-theme="cyber"] :where(button:not([data-no-bevel])):hover {
   unicode-bidi: isolate;
   text-align: left;
 }
+
+/* ── In-page find (Cmd+F) match highlighting ── */
+.ProseMirror .find-match {
+  background-color: color-mix(in srgb, var(--primary) 20%, transparent);
+  border-radius: 2px;
+}
+.ProseMirror .find-match--current {
+  background-color: color-mix(in srgb, var(--primary) 52%, transparent);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--primary) 68%, transparent);
+}

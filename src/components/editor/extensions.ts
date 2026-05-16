@@ -32,6 +32,7 @@ import { CabinetMath } from "./extensions/math-extension";
 import { IconExtension } from "./extensions/icon-extension";
 import { HeadingAnchors } from "./extensions/heading-anchors";
 import { AutoDirection } from "./extensions/auto-direction";
+import { FindExtension } from "./extensions/find";
 import { EditorMentionExtension } from "./mention-extension";
 
 // Curated language set: covers ~95% of real-world snippets. The full `common`
@@ -144,5 +145,6 @@ export const editorExtensions = [
   CalloutExtension,
   HeadingAnchors,
   AutoDirection,
+  FindExtension,
   EditorMentionExtension,
 ];

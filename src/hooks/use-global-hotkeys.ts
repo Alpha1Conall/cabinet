@@ -5,6 +5,7 @@ import { useAppStore } from "@/stores/app-store";
 import { useEditorStore } from "@/stores/editor-store";
 import { useTreeStore } from "@/stores/tree-store";
 import { useSearchStore } from "@/stores/search-store";
+import { useFindStore } from "@/stores/find-store";
 import { ROOT_CABINET_PATH } from "@/lib/cabinets/paths";
 
 function isEditableTarget(target: EventTarget | null): boolean {
@@ -29,6 +30,17 @@ export function useGlobalHotkeys(): void {
         e.preventDefault();
         e.stopPropagation();
         useSearchStore.getState().openPalette();
+        return;
+      }
+
+      // Cmd+F — open the in-page find bar (highlights matches on the page
+      // that's already open). Distinct from Cmd+K, which jumps between pages.
+      // Fires inside the editor too: the modifier makes it unambiguous and
+      // there is no native Electron find-in-page to collide with.
+      if (mod && !e.shiftKey && !e.altKey && (e.key === "f" || e.key === "F")) {
+        e.preventDefault();
+        e.stopPropagation();
+        useFindStore.getState().openFind();
         return;
       }
 

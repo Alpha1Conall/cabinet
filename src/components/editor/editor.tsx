@@ -9,6 +9,7 @@ import { SlashCommands } from "./slash-commands";
 import { EditorMentionPicker } from "./mention-picker";
 import { EditorBubbleMenu } from "./bubble-menu";
 import { TableMenu } from "./table-menu";
+import { FindBar } from "./find-bar";
 import { FolderIndex } from "./folder-index";
 import { useEditorStore } from "@/stores/editor-store";
 import { useAppStore } from "@/stores/app-store";
@@ -525,6 +526,7 @@ export function KBEditor() {
         </div>
       ) : (
         <div className="flex-1 relative" dir={isRtl ? "rtl" : undefined}>
+          <FindBar editor={editor} />
           <div className="absolute inset-0 overflow-y-auto" data-editor-scroll>
             <EditorContent editor={editor} />
             <EditorBubbleMenu editor={editor} />
@@ -561,12 +563,15 @@ export function KBEditor() {
 
       {/* Status bar */}
       <div className="flex items-center justify-between px-4 py-1 border-t border-border text-xs text-muted-foreground/60">
-        <span className="text-[10.5px] text-muted-foreground/30 select-none hidden sm:block">
-          <kbd className="rounded px-1 font-mono text-[9.5px] ring-1 ring-foreground/10">⌘S</kbd>
+        <span className="text-[11px] text-muted-foreground/70 select-none hidden sm:block">
+          <kbd className="rounded px-1 font-mono text-[10px] ring-1 ring-foreground/20">⌘S</kbd>
           {" "}save
-          <span className="mx-1.5 opacity-40">·</span>
-          <kbd className="rounded px-1 font-mono text-[9.5px] ring-1 ring-foreground/10">/</kbd>
+          <span className="mx-1.5 opacity-50">·</span>
+          <kbd className="rounded px-1 font-mono text-[10px] ring-1 ring-foreground/20">/</kbd>
           {" "}commands
+          <span className="mx-1.5 opacity-50">·</span>
+          <kbd className="rounded px-1 font-mono text-[10px] ring-1 ring-foreground/20">⌘F</kbd>
+          {" "}find
         </span>
         <span>
           {saveStatus === "saving" && "Saving..."}
