@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState, useCallback, useRef, useMemo } from "react";
-import { GitBranch, RefreshCw, Check, CloudDownload, Star, X, ArrowRight, HelpCircle, AlertTriangle, XCircle, CircleDot, Loader2, Terminal } from "lucide-react";
+import { GitBranch, RefreshCw, Check, CloudDownload, Star, X, HelpCircle, AlertTriangle, XCircle, CircleDot, Loader2, Terminal, PanelRight } from "lucide-react";
 import { useCabinetUpdate } from "@/hooks/use-cabinet-update";
 import { useEditorStore } from "@/stores/editor-store";
 import { useTreeStore } from "@/stores/tree-store";
@@ -13,11 +13,7 @@ import {
 } from "@/stores/health-store";
 import { useGithubStatsStore } from "@/stores/github-stats-store";
 import { StarExplosion, formatGithubStars } from "@/components/layout/star-explosion";
-import { createConversation } from "@/lib/agents/conversation-client";
-import {
-  TaskRuntimePicker,
-  type TaskRuntimeSelection,
-} from "@/components/composer/task-runtime-picker";
+import { useTaskRail } from "@/components/tasks/rail/task-rail-context";
 import { dedupFetch } from "@/lib/api/dedup-fetch";
 import { useLocale } from "@/i18n/use-locale";
 import type { TFunction } from "i18next";
@@ -177,48 +173,12 @@ export function StatusBar() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [lastSavedAt, savedTick]);
   const loadTree = useTreeStore((s) => s.loadTree);
-  const selectedPath = useTreeStore((s) => s.selectedPath);
-  const section = useAppStore((s) => s.section);
   const setSection = useAppStore((s) => s.setSection);
   const terminalOpen = useAppStore((s) => s.terminalOpen);
   const toggleTerminal = useAppStore((s) => s.toggleTerminal);
-  const [aiPrompt, setAiPrompt] = useState("");
-  const [aiSubmitting, setAiSubmitting] = useState(false);
-  const [aiRuntime, setAiRuntime] = useState<TaskRuntimeSelection>({});
-
-  const showAIPill = section.type === "page" && !!selectedPath;
-
-  const handleAISubmit = async () => {
-    if (!aiPrompt.trim() || !selectedPath || aiSubmitting) return;
-    const message = aiPrompt.trim();
-    setAiPrompt("");
-    setAiSubmitting(true);
-    // Open the drawer immediately (compose, editor-scoped) for instant
-    // feedback, then swap it to the live conversation once created.
-    useAppStore.getState().openTaskPanelCompose({
-      source: "editor",
-      pinnedPagePath: selectedPath,
-      defaultAgentSlug: "editor",
-    });
-    try {
-      try {
-        const data = await createConversation({
-          source: "editor",
-          pagePath: selectedPath,
-          userMessage: message,
-          mentionedPaths: [],
-          ...aiRuntime,
-        });
-        if (useAppStore.getState().taskPanelOpen) {
-          useAppStore.getState().swapToConversation(data.conversation);
-        }
-      } catch {
-        // Preserve the previous fire-and-forget behavior for the status bar action.
-      }
-    } finally {
-      setAiSubmitting(false);
-    }
-  };
+  const taskRailOpen = useAppStore((s) => s.taskRailOpen);
+  const toggleTaskRail = useAppStore((s) => s.toggleTaskRail);
+  const { runningCount, flash: taskRailFlash } = useTaskRail();
   const [isGitRepo, setIsGitRepo] = useState(false);
   // Audit #049: track when the last successful pull completed so the Sync
   // button's tooltip can answer "did the team's overnight work land?"
@@ -449,45 +409,6 @@ export function StatusBar() {
       aria-label={t("status:bar.ariaLabel")}
       className="relative flex items-center justify-between px-3 py-1 border-t border-border text-[11px] text-muted-foreground/60 bg-background"
     >
-      {/* Center: AI edit pill + runtime picker. Picker sits to the LEFT of
-          the pill so the narrow input stays readable; the same value is sent
-          in the createConversation call (terminal mode swaps to legacy PTY). */}
-      {showAIPill && (
-        <div className="absolute inset-x-0 mx-auto w-fit flex items-center gap-1.5 pointer-events-auto">
-          <TaskRuntimePicker
-            value={aiRuntime}
-            onChange={setAiRuntime}
-            className="h-6 px-1.5 text-[10px]"
-          />
-          <div className="flex items-center rounded-full border border-border/50 bg-muted/30 px-2.5 py-0.5 gap-1.5 focus-within:border-border/80 focus-within:bg-muted/60 transition-colors w-56">
-            <input
-              type="text"
-              // Audit #098: anonymous form field tripped the
-              // "needs id/name" warning on every page surface.
-              name="status-bar-ai-prompt"
-              aria-label={t("status:bar.askAiAriaLabel")}
-              title={t("status:bar.sendHint")}
-              value={aiPrompt}
-              onChange={(e) => setAiPrompt(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === "Enter" && !e.shiftKey) {
-                  e.preventDefault();
-                  void handleAISubmit();
-                }
-              }}
-              placeholder={t("status:bar.askAiPlaceholder")}
-              className="flex-1 bg-transparent text-[11px] text-foreground placeholder:text-muted-foreground/40 outline-none min-w-0"
-            />
-            <button
-              onClick={() => void handleAISubmit()}
-              disabled={!aiPrompt.trim() || aiSubmitting}
-              className="shrink-0 text-muted-foreground/30 hover:text-muted-foreground disabled:opacity-20 transition-colors cursor-pointer"
-            >
-              <ArrowRight className="h-3 w-3" />
-            </button>
-          </div>
-        </div>
-      )}
       <div className="flex min-w-0 items-center gap-3">
         <div className="relative">
           <button
@@ -1003,7 +924,7 @@ export function StatusBar() {
           Stars used to live as four separate pills competing visually with
           the live state. They're now collapsed into a single Help & community
           popover so the status bar stays readable at a glance. */}
-      <div className="relative flex items-center">
+      <div className="relative flex items-center gap-1">
         <button
           type="button"
           onClick={() => setShowCommunityPopup((v) => !v)}
@@ -1027,6 +948,31 @@ export function StatusBar() {
             >
               <Star className="h-2.5 w-2.5 fill-current" />
               {formatGithubStars(displayStars)}
+            </span>
+          )}
+        </button>
+        {/* Rail toggle — kept as the rightmost status-bar control so it sits
+            right against the rail's reserved gutter. */}
+        <button
+          type="button"
+          onClick={toggleTaskRail}
+          aria-label={taskRailOpen ? t("taskRail:hide") : t("taskRail:show")}
+          aria-pressed={taskRailOpen}
+          title={
+            runningCount > 0
+              ? t("taskRail:toggleRunning", { count: runningCount })
+              : taskRailOpen
+                ? t("taskRail:hide")
+                : t("taskRail:show")
+          }
+          className={`relative flex items-center gap-1 rounded-md px-1.5 py-0.5 transition-colors hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/60 focus-visible:ring-offset-1 ${
+            taskRailOpen ? "text-primary" : ""
+          } ${taskRailFlash ? "animate-pulse text-emerald-600 dark:text-emerald-400" : ""}`}
+        >
+          <PanelRight className="h-3 w-3" />
+          {runningCount > 0 && (
+            <span className="inline-flex min-w-3.5 items-center justify-center rounded-full bg-emerald-500/15 px-1 text-[9px] font-semibold tabular-nums text-emerald-700 dark:text-emerald-300">
+              {runningCount}
             </span>
           )}
         </button>
