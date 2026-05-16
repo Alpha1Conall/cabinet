@@ -18,6 +18,13 @@ interface DepthDropdownProps {
   /** Compact variant for the sidebar cabinet rail. */
   compact?: boolean;
   className?: string;
+  /**
+   * Per-option grey subtext override. Lets a host (e.g. the task board)
+   * phrase the scope in terms of what the page actually shows
+   * ("…the current cabinet's tasks") instead of the generic copy. Any
+   * mode left out falls back to the default i18n description.
+   */
+  descriptions?: Partial<Record<CabinetVisibilityMode, string>>;
 }
 
 export function DepthDropdown({
@@ -25,6 +32,7 @@ export function DepthDropdown({
   onChange,
   compact,
   className,
+  descriptions,
 }: DepthDropdownProps) {
   const { t } = useLocale();
   // Map each visibility value to translation keys; shortLabel falls back to
@@ -99,7 +107,7 @@ export function DepthDropdown({
                 <span className="flex flex-col gap-0.5">
                   <span className="text-[12.5px] leading-tight">{t(meta.labelKey)}</span>
                   <span className="text-[11px] leading-tight text-muted-foreground/80">
-                    {t(meta.descKey)}
+                    {descriptions?.[opt.value] ?? t(meta.descKey)}
                   </span>
                 </span>
               </span>

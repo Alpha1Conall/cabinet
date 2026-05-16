@@ -296,6 +296,14 @@ export function TasksBoard({
               setVisibilityMode(mode);
               setCabinetVisibilityMode(cabinetPath, mode);
             }}
+            descriptions={{
+              own: "Show only this cabinet's tasks.",
+              "children-1":
+                "Also show tasks from direct child cabinets.",
+              "children-2":
+                "Also show tasks from two levels of child cabinets.",
+              all: "Show tasks from this cabinet and all its children.",
+            }}
           />
 
           <div className="h-3.5 w-px bg-border/60" />
