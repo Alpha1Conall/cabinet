@@ -20,8 +20,8 @@ export interface RailItem {
 export interface TaskRailData {
   /** Live running / awaiting-input tasks, most-recent activity first. */
   running: RailItem[];
-  /** Tasks the user recently opened that aren't currently running. */
-  recent: RailItem[];
+  /** Every other task (any cabinet), most-recent activity first. */
+  rest: RailItem[];
   /** Number of running tasks (badge on the toggle button). */
   runningCount: number;
   /** True briefly after a running task finishes while the rail is closed. */
@@ -32,7 +32,8 @@ export interface TaskRailData {
   agentsBySlug: Map<string, CabinetAgentSummary>;
 }
 
-// Pull a generous pool so recently-opened ids can be resolved without paging.
+// Pull a generous pool of conversations across every cabinet — the rail
+// shows whatever fits and clips the rest, so we never need to page.
 const POOL_LIMIT = 60;
 // How long the toggle button pulses after a task finishes off-screen.
 const FLASH_MS = 4000;
@@ -47,7 +48,6 @@ function isRunning(task: TaskMeta): boolean {
  * stay reachable from any section (Data / Agents / Tasks).
  */
 export function useTaskRailData(): TaskRailData {
-  const recentlyOpenedTaskIds = useAppStore((s) => s.recentlyOpenedTaskIds);
   const railOpen = useAppStore((s) => s.taskRailOpen);
 
   const [items, setItems] = useState<RailItem[]>([]);
@@ -177,28 +177,22 @@ export function useTaskRailData(): TaskRailData {
       .filter((i) => isRunning(i.task))
       .sort((a, b) => activityTs(b.task) - activityTs(a.task));
 
-    const runningIds = new Set(running.map((i) => i.task.id));
-    const byId = new Map(items.map((i) => [i.task.id, i] as const));
-
-    // "Recent" = tasks the user opened this session, in click order,
-    // excluding ones currently running (already shown above) and any that
-    // have aged out of the fetched pool.
-    const recent: RailItem[] = [];
-    for (const id of recentlyOpenedTaskIds) {
-      if (runningIds.has(id)) continue;
-      const hit = byId.get(id);
-      if (hit) recent.push(hit);
-    }
+    // Everything else, across every cabinet, newest activity first. The
+    // rail clips whatever doesn't fit (no scrollbar), so the freshest work
+    // is always the part you actually see.
+    const rest = items
+      .filter((i) => !isRunning(i.task))
+      .sort((a, b) => activityTs(b.task) - activityTs(a.task));
 
     return {
       running,
-      recent,
+      rest,
       runningCount: running.length,
       flash: effectiveFlash,
       now,
       agentsBySlug,
     };
-  }, [items, recentlyOpenedTaskIds, effectiveFlash, now, agentsBySlug]);
+  }, [items, effectiveFlash, now, agentsBySlug]);
 }
 
 function activityTs(task: TaskMeta): number {

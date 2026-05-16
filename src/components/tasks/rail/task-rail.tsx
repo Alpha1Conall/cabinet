@@ -97,12 +97,15 @@ function avatarInput(
 
 function RailButton({
   item,
+  index,
   now,
   t,
   onShowTip,
   onHideTip,
 }: {
   item: RailItem;
+  /** Position in the flattened list — drives the cascade stagger. */
+  index: number;
   now: number;
   t: Translate;
   onShowTip: (label: string, el: HTMLElement) => void;
@@ -130,18 +133,26 @@ function RailButton({
       onMouseLeave={onHideTip}
       onFocus={(e) => onShowTip(label, e.currentTarget)}
       onBlur={onHideTip}
+      // Same cascade the sidebar uses for files/agents: each row fades +
+      // slides in, staggered by position. Stable task.id keys mean SSE
+      // refreshes don't replay it — only a fresh open of the rail does.
+      style={{
+        animationDelay: `${Math.min(index, 12) * 22}ms`,
+        animationFillMode: "backwards",
+      }}
       className={cn(
         "relative mx-auto flex h-7 w-7 items-center justify-center rounded-full",
         "transition-colors focus-visible:outline-none focus-visible:ring-2",
         "focus-visible:ring-ring/60",
+        "animate-in fade-in slide-in-from-top-1 duration-200 ease-out",
         // No brown selection ring — just a subtle themed fill for the
         // currently-open task; hover gets the same fill.
         isActive ? "bg-sidebar-accent" : "hover:bg-sidebar-accent"
       )}
     >
       <span className="relative">
-        <AgentAvatar agent={agent} size="xs" shape="circle" />
-        <span className="absolute -bottom-0.5 -end-0.5 flex h-2 w-2">
+        <AgentAvatar agent={agent} size="sm" shape="circle" />
+        <span className="absolute -bottom-0.5 -end-0.5 flex h-1.5 w-1.5">
           {dot.pulse && (
             <span
               className={cn(
@@ -152,7 +163,7 @@ function RailButton({
           )}
           <span
             className={cn(
-              "relative inline-flex h-2 w-2 rounded-full ring-1 ring-sidebar",
+              "relative inline-flex h-1.5 w-1.5 rounded-full ring-1 ring-sidebar",
               dot.cls
             )}
           />
@@ -166,16 +177,19 @@ function RailButton({
  * Thin (30px) always-available rail. It floats over the inline-end edge of
  * the content area (content scrolls underneath, a soft shadow on the
  * leading edge sells the depth) and uses the active theme's sidebar
- * surface so it reads a shade darker than the page. Running tasks sit on
- * top, then a hairline divider, then the tasks the user opened recently
- * this session. Clicking any item reopens the familiar task drawer.
+ * surface so it reads a shade darker than the page. Live tasks (running /
+ * awaiting-input) from every cabinet sit on top, then a hairline divider,
+ * then every other task newest-activity-first. There's no scrollbar — the
+ * rail simply shows as many as fit and clips the rest. Items cascade in
+ * with the same fade/slide the sidebar uses for files and agents.
+ * Clicking any item reopens the familiar task drawer.
  * Toggled from the status-bar button next to Help or with Cmd/Ctrl+Opt+L.
  */
 export function TaskRail() {
   const { t } = useLocale();
   const open = useAppStore((s) => s.taskRailOpen);
   const toggleTaskRail = useAppStore((s) => s.toggleTaskRail);
-  const { running, recent, now } = useTaskRail();
+  const { running, rest, now } = useTaskRail();
   const [tip, setTip] = useState<TipState | null>(null);
 
   // Anchor a single themed tooltip to the inline-start of the hovered
@@ -197,7 +211,7 @@ export function TaskRail() {
 
   if (!open) return null;
 
-  const empty = running.length === 0 && recent.length === 0;
+  const empty = running.length === 0 && rest.length === 0;
   const tipOnLeftOfRail = tip?.right != null;
 
   return (
@@ -227,17 +241,21 @@ export function TaskRail() {
         <ChevronRight className="h-3.5 w-3.5 rtl:rotate-180" />
       </button>
 
-      <div className="flex min-h-0 flex-1 flex-col gap-1 overflow-y-auto overflow-x-hidden py-1">
+      {/* No scrollbar by design: render the whole list and let the rail
+          clip whatever doesn't fit. Live work is on top, so the part you
+          see is always the part that matters most. */}
+      <div className="flex min-h-0 flex-1 flex-col gap-1 overflow-hidden py-1">
         {empty && (
           <p className="px-1 py-2 text-center text-[9px] leading-tight text-sidebar-foreground/50">
             {t("taskRail:empty")}
           </p>
         )}
 
-        {running.map((item) => (
+        {running.map((item, i) => (
           <RailButton
             key={item.task.id}
             item={item}
+            index={i}
             now={now}
             t={t}
             onShowTip={showTip}
@@ -245,17 +263,18 @@ export function TaskRail() {
           />
         ))}
 
-        {running.length > 0 && recent.length > 0 && (
+        {running.length > 0 && rest.length > 0 && (
           <span
             aria-hidden
             className="mx-auto my-0.5 h-px w-4 bg-sidebar-border"
           />
         )}
 
-        {recent.map((item) => (
+        {rest.map((item, i) => (
           <RailButton
             key={item.task.id}
             item={item}
+            index={running.length + i}
             now={now}
             t={t}
             onShowTip={showTip}
