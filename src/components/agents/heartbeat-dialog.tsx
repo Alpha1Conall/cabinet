@@ -158,12 +158,6 @@ export function HeartbeatDialog({
                   </span>
                 </span>
               </DialogTitle>
-              <DialogDescription className="text-[13px] leading-6">
-                A heartbeat wakes this agent on its own rhythm. Each time it
-                fires, the agent checks in and decides what to work on — driven
-                by its persona instructions. Set how often it should wake up
-                here; to change what it does each time, open the agent page.
-              </DialogDescription>
             </div>
             <div className="flex shrink-0 gap-1.5">
               <Button
@@ -206,6 +200,12 @@ export function HeartbeatDialog({
               </label>
             </div>
           </div>
+          <DialogDescription className="text-[13px] leading-6">
+            A heartbeat wakes this agent on its own rhythm. Each time it
+            fires, the agent checks in and decides what to work on — driven by
+            its persona instructions. Set how often it should wake up here; to
+            change what it does each time, open the agent page.
+          </DialogDescription>
         </DialogHeader>
 
         <div className="space-y-4">
