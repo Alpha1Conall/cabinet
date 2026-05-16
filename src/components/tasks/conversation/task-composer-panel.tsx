@@ -99,6 +99,12 @@ export interface TaskComposerPanelProps {
    * non-interactive because continuation turns can't change the agent.
    */
   agent?: AgentPickerOption | null;
+  /**
+   * Tight surface (the side-panel conversation view): hides the
+   * Run-now/Inbox/schedule WhenChip and renders the runtime picker
+   * icon-only so the composer isn't visually overloaded.
+   */
+  compact?: boolean;
 }
 
 export function TaskComposerPanel({
@@ -113,6 +119,7 @@ export function TaskComposerPanel({
   disabled,
   onScheduleHandoff,
   agent,
+  compact = false,
 }: TaskComposerPanelProps) {
   const { t } = useLocale();
   // We don't seed with initialRuntime directly — that way, when the parent
@@ -321,7 +328,7 @@ export function TaskComposerPanel({
         maxHeight="240px"
         className={awaitingInput ? "[&>div:first-child]:border-amber-500/40" : undefined}
         topRightOverlay={
-          onScheduleHandoff ? (
+          onScheduleHandoff && !compact ? (
             <WhenChip
               mode="now"
               onChange={(next) => {
@@ -345,6 +352,7 @@ export function TaskComposerPanel({
               value={effectiveRuntime}
               onChange={handleRuntimeChange}
               align="start"
+              compact={compact}
             />
           </>
         }

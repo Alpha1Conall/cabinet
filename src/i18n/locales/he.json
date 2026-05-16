@@ -879,7 +879,9 @@
       "switchToLtr": "מעבר לכיוון משמאל לימין",
       "switchToRtl": "מעבר לכיוון מימין לשמאל",
       "scrollLeft": "גלילת סרגל הכלים שמאלה",
-      "scrollRight": "גלילת סרגל הכלים ימינה"
+      "scrollRight": "גלילת סרגל הכלים ימינה",
+      "markdown": "Markdown",
+      "preview": "תצוגה מקדימה"
     }
   },
   "home": {

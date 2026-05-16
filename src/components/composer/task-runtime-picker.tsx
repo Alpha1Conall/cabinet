@@ -1064,11 +1064,15 @@ export function TaskRuntimePicker({
   onChange,
   align = "start",
   className,
+  compact = false,
 }: {
   value: TaskRuntimeSelection;
   onChange: (value: TaskRuntimeSelection) => void;
   align?: "start" | "center" | "end";
   className?: string;
+  /** Icon-only trigger (no model/effort labels) — used in tight surfaces
+   *  like the side-panel conversation composer. */
+  compact?: boolean;
 }) {
   const { t } = useLocale();
   const providers = useAppStore((s) => s.providers);
@@ -1244,7 +1248,8 @@ export function TaskRuntimePicker({
     <DropdownMenu open={open} onOpenChange={setOpen}>
       <DropdownMenuTrigger
         className={cn(
-          "inline-flex h-8 items-center gap-1 rounded-md border px-2 transition-colors disabled:pointer-events-none disabled:opacity-50",
+          "inline-flex h-8 items-center rounded-md border transition-colors disabled:pointer-events-none disabled:opacity-50",
+          compact ? "gap-0 px-1.5" : "gap-1 px-2",
           isTerminalTrigger
             ? "border-emerald-500/40 bg-zinc-950 text-zinc-100 hover:bg-zinc-900"
             : "border-border/70 bg-background text-muted-foreground hover:bg-accent hover:text-accent-foreground",
@@ -1260,26 +1265,34 @@ export function TaskRuntimePicker({
               <div className="flex size-4 shrink-0 items-center justify-center rounded border border-emerald-500/40 bg-zinc-900 text-emerald-400">
                 <Terminal className="h-2.5 w-2.5" />
               </div>
-              <span className="text-[11px] font-medium text-zinc-100">
-                {currentProvider.name}
-              </span>
-              <span className="text-[9px] text-zinc-500">·</span>
-              <span className="text-[9px] font-semibold uppercase tracking-wide text-emerald-400">
-                Terminal
-              </span>
+              {!compact && (
+                <>
+                  <span className="text-[11px] font-medium text-zinc-100">
+                    {currentProvider.name}
+                  </span>
+                  <span className="text-[9px] text-zinc-500">·</span>
+                  <span className="text-[9px] font-semibold uppercase tracking-wide text-emerald-400">
+                    Terminal
+                  </span>
+                </>
+              )}
             </>
           ) : (
             <>
               <div className="flex size-4 shrink-0 items-center justify-center rounded border border-border/60 bg-muted/30">
                 <ProviderGlyph icon={currentProvider.icon} className="h-2.5 w-2.5" />
               </div>
-              <span className={cn("text-[11px] font-medium", getEffortTone(normalizedValue.effort ?? AUTO_EFFORT_ID).header)}>
-                {currentModel?.name || currentProvider.name}
-              </span>
-              <span className="text-[9px] text-muted-foreground/40">·</span>
-              <span className={cn("text-[9px] font-medium", getEffortTone(normalizedValue.effort ?? AUTO_EFFORT_ID).header)}>
-                {currentEffort?.name || (normalizedValue.effort ? formatEffortName(normalizedValue.effort) : t("runtime:auto"))}
-              </span>
+              {!compact && (
+                <>
+                  <span className={cn("text-[11px] font-medium", getEffortTone(normalizedValue.effort ?? AUTO_EFFORT_ID).header)}>
+                    {currentModel?.name || currentProvider.name}
+                  </span>
+                  <span className="text-[9px] text-muted-foreground/40">·</span>
+                  <span className={cn("text-[9px] font-medium", getEffortTone(normalizedValue.effort ?? AUTO_EFFORT_ID).header)}>
+                    {currentEffort?.name || (normalizedValue.effort ? formatEffortName(normalizedValue.effort) : t("runtime:auto"))}
+                  </span>
+                </>
+              )}
             </>
           )
         ) : loading ? (
@@ -1287,7 +1300,9 @@ export function TaskRuntimePicker({
         ) : (
           <>
             <BrainCircuit className="h-4 w-4" />
-            <span className="text-[11px] font-medium">{t("runtime:auto")}</span>
+            {!compact && (
+              <span className="text-[11px] font-medium">{t("runtime:auto")}</span>
+            )}
           </>
         )}
       </DropdownMenuTrigger>

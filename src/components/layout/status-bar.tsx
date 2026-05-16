@@ -6,7 +6,6 @@ import { useCabinetUpdate } from "@/hooks/use-cabinet-update";
 import { useEditorStore } from "@/stores/editor-store";
 import { useTreeStore } from "@/stores/tree-store";
 import { useAppStore } from "@/stores/app-store";
-import { useAIPanelStore } from "@/stores/ai-panel-store";
 import {
   selectAppLevel,
   selectDaemonLevel,
@@ -181,10 +180,8 @@ export function StatusBar() {
   const selectedPath = useTreeStore((s) => s.selectedPath);
   const section = useAppStore((s) => s.section);
   const setSection = useAppStore((s) => s.setSection);
-  const setAiPanelCollapsed = useAppStore((s) => s.setAiPanelCollapsed);
   const terminalOpen = useAppStore((s) => s.terminalOpen);
   const toggleTerminal = useAppStore((s) => s.toggleTerminal);
-  const { open, addEditorSession } = useAIPanelStore();
   const [aiPrompt, setAiPrompt] = useState("");
   const [aiSubmitting, setAiSubmitting] = useState(false);
   const [aiRuntime, setAiRuntime] = useState<TaskRuntimeSelection>({});
@@ -196,8 +193,13 @@ export function StatusBar() {
     const message = aiPrompt.trim();
     setAiPrompt("");
     setAiSubmitting(true);
-    setAiPanelCollapsed(false);
-    open();
+    // Open the drawer immediately (compose, editor-scoped) for instant
+    // feedback, then swap it to the live conversation once created.
+    useAppStore.getState().openTaskPanelCompose({
+      source: "editor",
+      pinnedPagePath: selectedPath,
+      defaultAgentSlug: "editor",
+    });
     try {
       try {
         const data = await createConversation({
@@ -207,17 +209,9 @@ export function StatusBar() {
           mentionedPaths: [],
           ...aiRuntime,
         });
-        const conversation = data.conversation as { id: string; title: string };
-        addEditorSession({
-          id: conversation.id,
-          sessionId: conversation.id,
-          pagePath: selectedPath,
-          userMessage: message,
-          prompt: conversation.title,
-          timestamp: Date.now(),
-          status: "running",
-          reconnect: true,
-        });
+        if (useAppStore.getState().taskPanelOpen) {
+          useAppStore.getState().swapToConversation(data.conversation);
+        }
       } catch {
         // Preserve the previous fire-and-forget behavior for the status bar action.
       }
@@ -459,7 +453,7 @@ export function StatusBar() {
           the pill so the narrow input stays readable; the same value is sent
           in the createConversation call (terminal mode swaps to legacy PTY). */}
       {showAIPill && (
-        <div className="absolute left-1/2 -translate-x-1/2 flex items-center gap-1.5 pointer-events-auto">
+        <div className="absolute inset-x-0 mx-auto w-fit flex items-center gap-1.5 pointer-events-auto">
           <TaskRuntimePicker
             value={aiRuntime}
             onChange={setAiRuntime}
@@ -552,7 +546,7 @@ export function StatusBar() {
             </span>
           </button>
           {showServerPopup && (
-            <div className={`absolute bottom-full left-0 mb-2 z-50 w-80 rounded-lg border bg-background p-3 shadow-lg ${
+            <div className={`absolute bottom-full start-0 mb-2 z-50 w-80 rounded-lg border bg-background p-3 shadow-lg ${
               appAlive && daemonAlive && anyProviderReady
                 ? "border-green-500/30"
                 : !appAlive
@@ -860,7 +854,7 @@ export function StatusBar() {
               : t("status:git2.allCommitted")}
           </button>
           {showUncommittedPopup && uncommitted > 0 && (
-            <div className="absolute bottom-full left-0 mb-2 z-50 w-80 rounded-lg border border-border bg-background p-2 shadow-lg">
+            <div className="absolute bottom-full start-0 mb-2 z-50 w-80 rounded-lg border border-border bg-background p-2 shadow-lg">
               <div className="mb-1.5 flex items-center justify-between gap-2 border-b border-border/60 pb-1.5">
                 <span className="text-[11px] font-medium text-foreground/80">
                   {uncommitted} uncommitted file{uncommitted === 1 ? "" : "s"}
@@ -1037,7 +1031,7 @@ export function StatusBar() {
           )}
         </button>
         {showCommunityPopup && (
-          <div className="absolute bottom-full right-0 mb-2 z-50 w-64 rounded-lg border border-border bg-background p-1.5 shadow-lg">
+          <div className="absolute bottom-full end-0 mb-2 z-50 w-64 rounded-lg border border-border bg-background p-1.5 shadow-lg">
             <button
               type="button"
               onClick={() => {

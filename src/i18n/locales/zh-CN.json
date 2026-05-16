@@ -879,7 +879,9 @@
       "switchToLtr": "切换为从左至右",
       "switchToRtl": "切换为从右至左",
       "scrollLeft": "向左滚动工具栏",
-      "scrollRight": "向右滚动工具栏"
+      "scrollRight": "向右滚动工具栏",
+      "markdown": "Markdown",
+      "preview": "预览"
     }
   },
   "home": {

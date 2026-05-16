@@ -137,13 +137,42 @@ function parseCodeBlock(
   return null;
 }
 
-function parseStructuredLine(line: string): Block | null {
-  const match = line.match(
-    /^(SUMMARY|CONTEXT|CONTEXT_UPDATE|ARTIFACT|DECISION|LEARNING|GOAL_UPDATE|MESSAGE_TO|LAUNCH_TASK|SCHEDULE_JOB|SCHEDULE_TASK)\s*(?:\[([^\]]*)\])?:\s+(.*)$/
-  );
-  if (!match) return null;
-  const label = match[2] ? `${match[1]} [${match[2]}]` : match[1];
-  return { type: "structured", label, value: match[3] };
+const STRUCTURED_LABELS =
+  "SUMMARY|CONTEXT|CONTEXT_UPDATE|ARTIFACT|DECISION|LEARNING|GOAL_UPDATE|MESSAGE_TO|LAUNCH_TASK|SCHEDULE_JOB|SCHEDULE_TASK";
+// A label token at line start or after whitespace. No `:\s+` requirement —
+// agents (esp. with RTL/CJK values) emit `SUMMARY:value` with no space,
+// which must still be recognized as a meta field instead of leaking into
+// the markdown body. Mirrors STRUCTURED_RE's tolerant `:\s*`.
+const STRUCTURED_SEGMENT_RE = new RegExp(
+  `(?:^|\\s)(${STRUCTURED_LABELS})\\s*(?:\\[([^\\]]*)\\])?:\\s*`,
+  "g"
+);
+const STRUCTURED_START_RE = new RegExp(
+  `^\\s*(?:${STRUCTURED_LABELS})\\s*(?:\\[[^\\]]*\\])?:`
+);
+
+// A single line can carry one meta field, or several squashed together
+// ("SUMMARY:… CONTEXT:… ARTIFACT:…"). Only treat the line as structured
+// when it *starts* with a known label, so prose mentioning "context:" is
+// left untouched. Returns one structured block per field.
+function parseStructuredLine(line: string): Block[] | null {
+  if (!STRUCTURED_START_RE.test(line)) return null;
+  const trimmed = line.trim();
+  const matches = [...trimmed.matchAll(STRUCTURED_SEGMENT_RE)];
+  if (matches.length === 0) return null;
+  const blocks: Block[] = [];
+  for (let m = 0; m < matches.length; m += 1) {
+    const cur = matches[m];
+    const valueStart = (cur.index ?? 0) + cur[0].length;
+    const valueEnd =
+      m + 1 < matches.length
+        ? matches[m + 1].index ?? trimmed.length
+        : trimmed.length;
+    const value = trimmed.slice(valueStart, valueEnd).trim();
+    const label = cur[2] ? `${cur[1]} [${cur[2]}]` : cur[1];
+    blocks.push({ type: "structured", label, value });
+  }
+  return blocks;
 }
 
 // Agents occasionally squash multiple files onto one `ARTIFACT:` line
@@ -230,7 +259,7 @@ export function parseTranscript(raw: string): Block[] {
     const structured = parseStructuredLine(line);
     if (structured) {
       flushText();
-      blocks.push(structured);
+      blocks.push(...structured);
       i += 1;
       continue;
     }

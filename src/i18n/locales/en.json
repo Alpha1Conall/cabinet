@@ -958,7 +958,9 @@
       "switchToLtr": "Switch to LTR",
       "switchToRtl": "Switch to RTL",
       "scrollLeft": "Scroll toolbar left",
-      "scrollRight": "Scroll toolbar right"
+      "scrollRight": "Scroll toolbar right",
+      "markdown": "Markdown",
+      "preview": "Preview"
     }
   },
   "home": {

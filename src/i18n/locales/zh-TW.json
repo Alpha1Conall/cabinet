@@ -879,7 +879,9 @@
       "switchToLtr": "切換為由左至右",
       "switchToRtl": "切換為由右至左",
       "scrollLeft": "向左捲動工具列",
-      "scrollRight": "向右捲動工具列"
+      "scrollRight": "向右捲動工具列",
+      "markdown": "Markdown",
+      "preview": "預覽"
     }
   },
   "home": {

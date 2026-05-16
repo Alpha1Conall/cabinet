@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { FileText, Plus, Repeat, Zap } from "lucide-react";
+import { ChevronDown, FileText, MessageCircle, Repeat, Zap } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -43,6 +43,7 @@ import { useLocale } from "@/i18n/use-locale";
  */
 export function NewTaskButton() {
   const { t } = useLocale();
+  const openTaskPanelCompose = useAppStore((s) => s.openTaskPanelCompose);
   const section = useAppStore((s) => s.section);
   const setSection = useAppStore((s) => s.setSection);
   const setTaskPanelConversation = useAppStore(
@@ -138,14 +139,37 @@ export function NewTaskButton() {
   return (
     <>
       <DropdownMenu>
-        <DropdownMenuTrigger
-          className="inline-flex h-7 items-center gap-1 rounded-md border border-border/70 bg-card/60 px-2 text-foreground/80 transition-colors hover:bg-accent hover:text-foreground hover:border-border data-[popup-open]:bg-accent data-[popup-open]:text-foreground"
-          title={t("newTaskButton:createNew")}
-          aria-label={t("newTaskButton:createNew")}
-        >
-          <Plus className="size-3.5" />
-          <span className="text-[12px] font-medium">New</span>
-        </DropdownMenuTrigger>
+        {/* Split button: the primary half opens the AI Editor drawer; the
+            chevron half opens the create menu (page / task / routine). */}
+        <div className="inline-flex h-7 items-stretch overflow-hidden rounded-md border border-border/70 bg-card/60 text-foreground/80">
+          <button
+            type="button"
+            onClick={() =>
+              openTaskPanelCompose(
+                section.type === "page" && selectedPath
+                  ? {
+                      source: "editor",
+                      pinnedPagePath: selectedPath,
+                      defaultAgentSlug: "editor",
+                    }
+                  : undefined
+              )
+            }
+            title={t("common:aiPanel.open")}
+            aria-label={t("common:aiPanel.open")}
+            className="inline-flex items-center gap-1.5 px-3 transition-colors hover:bg-accent hover:text-foreground"
+          >
+            <MessageCircle className="size-4" />
+            <span className="text-[12px] font-medium">New Chat</span>
+          </button>
+          <DropdownMenuTrigger
+            className="inline-flex items-center border-l border-border/70 px-1.5 transition-colors hover:bg-accent hover:text-foreground data-[popup-open]:bg-accent data-[popup-open]:text-foreground"
+            title={t("newTaskButton:createNew")}
+            aria-label={t("newTaskButton:createNew")}
+          >
+            <ChevronDown className="size-3.5" />
+          </DropdownMenuTrigger>
+        </div>
         <DropdownMenuContent align="end" className="min-w-[240px]">
           {showPageItem && (
             <DropdownMenuItem
