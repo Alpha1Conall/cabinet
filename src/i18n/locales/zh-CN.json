@@ -1181,7 +1181,7 @@
     "refreshedWithChanges": "已刷新 — 新增 {{added}},移除 {{removed}}。",
     "refreshFailed": "刷新失败。",
     "drawerData": "数据",
-    "drawerAgents": "智能体",
+    "drawerAgents": "团队",
     "drawerTasks": "任务"
   },
   "status": {

@@ -1181,7 +1181,7 @@
     "refreshedWithChanges": "已重新整理 — 新增 {{added}},移除 {{removed}}。",
     "refreshFailed": "重新整理失敗。",
     "drawerData": "資料",
-    "drawerAgents": "智慧代理",
+    "drawerAgents": "團隊",
     "drawerTasks": "任務"
   },
   "status": {
