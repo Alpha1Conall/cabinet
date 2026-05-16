@@ -560,7 +560,7 @@ export function TreeNode({
         </ContextMenuTrigger>
         <ContextMenuContent>
           <ContextMenuGroup>
-            <ContextMenuLabel>Add to this item</ContextMenuLabel>
+            <ContextMenuLabel className="font-normal text-muted-foreground/50">Add to this item</ContextMenuLabel>
             <ContextMenuItem onClick={() => setSubPageOpen(true)}>
               <FilePlus className="h-4 w-4 me-2" />
               Add Sub Page
@@ -587,7 +587,7 @@ export function TreeNode({
           </ContextMenuGroup>
           <ContextMenuSeparator />
           <ContextMenuGroup>
-            <ContextMenuLabel>This item</ContextMenuLabel>
+            <ContextMenuLabel className="font-normal text-muted-foreground/50">This item</ContextMenuLabel>
             <ContextMenuItem onClick={() => { setRenameTitle(title); setRenameOpen(true); }}>
               <Pencil className="h-4 w-4 me-2" />
               Rename
