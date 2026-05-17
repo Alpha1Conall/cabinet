@@ -97,6 +97,7 @@
     "remark-stringify": "^11.0.0",
     "shadcn": "^4.1.0",
     "simple-git": "^3.33.0",
+    "smol-toml": "^1.6.1",
     "tailwind-merge": "^3.5.0",
     "tsx": "^4.21.0",
     "turndown": "^7.2.2",

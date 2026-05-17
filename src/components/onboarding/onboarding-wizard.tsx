@@ -1865,6 +1865,20 @@ export function OnboardingWizard({ onComplete }: { onComplete: () => void }) {
             defaultEffort: selectedEffort || undefined,
           }),
         });
+
+        // Seed the set of environments integrations install into from the CLI
+        // the user just set up. The endpoint sanitizes to MCP-capable
+        // providers (a no-op for non-capable ones) and the user can edit this
+        // any time in Settings → Integrations. Best-effort: never block setup.
+        try {
+          await fetch("/api/agents/config/integration-environments", {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ environments: [selectedProvider] }),
+          });
+        } catch {
+          /* non-critical — defaults apply until edited in Settings */
+        }
       }
 
       await fetch("/api/onboarding/setup", {
