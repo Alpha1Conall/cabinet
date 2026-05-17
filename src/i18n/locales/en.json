@@ -1364,7 +1364,7 @@
       "allCommitted": "All committed",
       "uncommittedFile": "{{count}} uncommitted file",
       "uncommittedFiles": "{{count}} uncommitted files",
-      "uncommittedFilesAria": "{{count}} uncommitted file{{plural}} — click to see the list",
+      "uncommittedFilesAria": "{{count}} uncommitted file(s) — click to see the list",
       "uncommittedFileTip": "Click to see uncommitted file",
       "uncommittedFilesTip": "Click to see uncommitted files",
       "uncommittedFilesHeading": "{{count}} uncommitted file",

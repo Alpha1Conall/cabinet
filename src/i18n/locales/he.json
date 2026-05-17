@@ -325,6 +325,14 @@
     "heartbeats": "פעימות",
     "noHeartbeats": "טרם הוגדרו פעימות."
   },
+  "scheduleTab": {
+    "explainer1": "כל מה שהצוות שלכם עושה השבוע, ביומן אחד. ורוד הוא heartbeat, ירוק הוא שגרה. לחצו על כל גלולה כדי לערוך.",
+    "explainer2": "השתמשו בטאב הזה כדי לזהות התנגשויות, למצוא קטעים שקטים, או פשוט לראות במבט אחד כמה הצוות עסוק.",
+    "aboutAria": "על לוח הזמנים",
+    "modeDay": "יום",
+    "modeWeek": "שבוע",
+    "modeMonth": "חודש"
+  },
   "mermaidViewer": {
     "zoomOut": "התרחקות",
     "zoomIn": "התקרבות",
@@ -447,6 +455,49 @@
     "editor": "עורך",
     "slashMenu": "תפריט לוכסן"
   },
+  "slideDataCopy": {
+    "slideNum": "01 · נתונים",
+    "headlineSentence": "<accent>מקור האמת היחיד</accent> שלכם.",
+    "paragraphPrefix": "Markdown, PDFים, גיליונות, מצגות, תמונות, וידאו, אודיו, ריפואים מקושרים, אפליקציות אינטרנט משובצות, Google Docs. אזכרו כל אחד מהם עם ",
+    "paragraphSuffix": ".",
+    "secondParagraphPrefix": "מקום אחד להכל — כך אתם וצוות ה-AI קוראים, עורכים ומשגרים מאותם ",
+    "sameFiles": "קבצים",
+    "secondParagraphSuffix": ", לא מעותקים של עותקים.",
+    "mockTitle": "הארונית של הילה"
+  },
+  "slideData": {
+    "thailandRootLabel": "טיול לתאילנד",
+    "thailandCaption": "כל הקבצים שלכם במקום אחד.",
+    "videoTitle": "Night market.mp4",
+    "taxRootLabel": "מס 2026",
+    "taxCaption": "מס 2026 — מחשבון אינטראקטיבי, משובץ בתוך הארונית שלכם.",
+    "calculatorTitle": "מחשבון",
+    "liveAppBadge": "אפליקציה חיה",
+    "taxEstimateLabel": "אומדן מס 2026",
+    "income": "הכנסה",
+    "deductions": "ניכויים",
+    "taxBracket": "מדרגת מס",
+    "estimatedTax": "מס משוער",
+    "healthRootLabel": "בריאות",
+    "healthCaption": "ויטמינים ובדיקות — גיליון שמרגיש כמו דף.",
+    "csvTitle": "ויטמינים יומיים.csv",
+    "csvColVitamin": "ויטמין",
+    "csvColDose": "מינון",
+    "csvColTime": "שעה",
+    "csvColDone": "בוצע",
+    "repoRootLabel": "cabinet-repo",
+    "repoCaption": "קודבייסים — קשרו כל ריפו ב-Git, חיפושי על-ידי הסוכנים שלכם.",
+    "schemaTitle": "schema.ts",
+    "tsBadge": "TS"
+  },
+  "slideTasks": {
+    "slideNum": "03 · משימות",
+    "typedCommand": "הריצו 10 משימות, כל אחת כותבת שיר, שמרו ל-@Songs/",
+    "headlineSentence": "מוכנים <accent>להתחיל</accent>?",
+    "paragraphPrefix": "כתבו משימה. הריצו אחת, הריצו עשר, תזמנו לנצח. אזכרו דפים עם ",
+    "paragraphSuffix": ", שמרו את הפלט לאן שתרצו. עכשיו אתם הבמאי.",
+    "savingFolder": "שירים/"
+  },
   "slideAgents": {
     "persona": "פרסונה",
     "heartbeat": "פעימה",
@@ -456,6 +507,7 @@
     "otherOrganizer": "מארגן",
     "idle": "ממתין",
     "researchAnalyst": "מנתח מחקר",
+    "modelLine": "Claude · Sonnet 4.6",
     "live": "פעיל",
     "personaBody": "\"מנתח קפדני. מצטט מקורות. מסמן טענות סותרות.\"",
     "heartbeatBody": "סורק את @Market Research כל 15 דקות",
@@ -468,8 +520,7 @@
     "paragraphMiddle2": " משלו, ויש לו ",
     "memoryWord": "זיכרון",
     "paragraphSuffix": ". סוכני ה-AI שלכם עושים את העבודה, 24/7. תתעסקו בלהיות בני אדם — הם יטפלו בשאר.",
-    "aiTeamSentence": "ה-<accent>צוות AI</accent> שלכם.",
-    "modelLine": "Claude · Sonnet 4.6"
+    "aiTeamSentence": "ה-<accent>צוות AI</accent> שלכם."
   },
   "startWork": {
     "close": "סגירה",
@@ -491,7 +542,7 @@
     "modeNowHint": "התחילו את השיחה הזו מיד",
     "modeRecurringLabel": "לפי לוח זמנים",
     "modeRecurringHint": "הריצו את הפרומפט הזה לפי לוח זמנים",
-    "modeHeartbeatLabel": "Heartbeat",
+    "modeHeartbeatLabel": "דופק",
     "modeHeartbeatHint": "העירו את הסוכן לפי הקצב שלו",
     "agentFallback": "סוכן",
     "failedToStart": "ההפעלה נכשלה",
@@ -564,6 +615,33 @@
   "agentList": {
     "agentLibrary": "ספריית סוכנים",
     "newAgent": "סוכן חדש"
+  },
+  "helpVisuals": {
+    "cabinet": "Cabinet",
+    "yourTeam": "הצוות שלכם",
+    "lead": "ראש צוות",
+    "specialist": "מומחה",
+    "tasks": "משימות",
+    "todo": "ממתין",
+    "doing": "בעבודה",
+    "done": "הושלם",
+    "anythingGoes": "הכל מותר",
+    "marketing": "שיווק",
+    "product": "מוצר",
+    "research": "מחקר",
+    "design": "עיצוב",
+    "routines": "שגרות",
+    "dailyReview": "סקירה יומית",
+    "weeklyDigest": "סיכום שבועי",
+    "conversation": "שיחה",
+    "userQuery": "תכנן לי טיול של שבועיים בתאילנד…",
+    "agentReply": "אני אשלח את הלוקאליסט והעורך.",
+    "pendingAction": "פעולה ממתינה",
+    "approve": "אישור",
+    "decline": "דחייה",
+    "themes": "ערכות נושא",
+    "providers": "ספקים",
+    "comingSoon": "בקרוב"
   },
   "agentLive": {
     "dismiss": "סגירה",
@@ -904,6 +982,10 @@
       "namePlaceholder": "שם הארונית…",
       "renameWarning": "אי אפשר לשנות את שם הארונית מאוחר יותר (לעת עתה). בחרו בקפידה."
     },
+    "templates": {
+      "header": "התחילו מתבנית",
+      "browseAll": "ראו הכל ←"
+    },
     "quickActions": {
       "shuffle": "הצג הצעות אחרות",
       "launch10Songs": "השיקו 10 עורכי שירים",
@@ -930,13 +1012,10 @@
     "greetingWithName": "{{greeting}}, {{name}}.",
     "greetingNoName": "{{greeting}}.",
     "composerPlaceholder": "אני רוצה ליצור...",
-    "composerDaemonDown": "ה-daemon של הסוכנים לא פעיל — הפעילו מחדש כדי לשלוח",
-    "templates": {
-      "header": "התחילו מתבנית",
-      "browseAll": "ראו הכל ←"
-    }
+    "composerDaemonDown": "ה-daemon של הסוכנים לא פעיל — הפעילו מחדש כדי לשלוח"
   },
   "onboarding": {
+    "launchHeading": "התחילו את ה-<accent>Cabinet</accent> שלכם",
     "intro": {
       "tagline1": "מאגר הידע שלך.",
       "tagline2": "צוות ה-AI שלך.",
@@ -972,8 +1051,7 @@
       "finish": "סיום",
       "complete": "סיום ההגדרה",
       "copyToClipboard": "העתקה ללוח"
-    },
-    "launchHeading": "התחילו את ה-<accent>Cabinet</accent> שלכם"
+    }
   },
   "search": {
     "title": "חיפוש",
@@ -1031,6 +1109,13 @@
       "appearance": "מראה",
       "updates": "עדכונים",
       "about": "אודות"
+    },
+    "page": {
+      "title": "הגדרות",
+      "refresh": "רענון",
+      "groupYou": "אתם",
+      "groupWorkspace": "מרחב עבודה",
+      "groupApp": "אפליקציה"
     },
     "common": {
       "copyToClipboard": "העתקה ללוח",
@@ -1104,7 +1189,7 @@
       "cabinet": "Cabinet",
       "version": "גרסה",
       "release": "מהדורה",
-      "framework": "Framework",
+      "framework": "פריים-וורק",
       "storage": "אחסון",
       "privacy": "פרטיות",
       "telemetry": "נתוני שימוש אנונימיים",
@@ -1164,13 +1249,6 @@
       "teamSize": "גודל צוות",
       "teamSizePlaceholder": "סולו / 2–5 / 6–20 / 20+",
       "subtitle": "נקלט במהלך ההגעה. סוכנים קוראים את זה כשהם מתכננים עבודה."
-    },
-    "page": {
-      "title": "הגדרות",
-      "refresh": "רענון",
-      "groupYou": "אתם",
-      "groupWorkspace": "מרחב עבודה",
-      "groupApp": "אפליקציה"
     }
   },
   "sidebar": {
@@ -1185,6 +1263,9 @@
     "agents": "סוכנים",
     "tasks": "משימות",
     "missions": "מטרות",
+    "drawerData": "נתונים",
+    "drawerAgents": "צוות",
+    "drawerTasks": "משימות",
     "goHome": "מעבר לדף הבית",
     "brandWord": "קבינט",
     "refresh": "רענון סרגל הצד",
@@ -1198,10 +1279,7 @@
     "refreshFailed": "הרענון נכשל.",
     "searchPlaceholder": "חיפוש קבצים…",
     "searchSearching": "מחפש…",
-    "searchNoResults": "אין קבצים התואמים ל־“{{query}}”",
-    "drawerData": "נתונים",
-    "drawerAgents": "צוות",
-    "drawerTasks": "משימות"
+    "searchNoResults": "אין קבצים התואמים ל־“{{query}}”"
   },
   "status": {
     "bar": {
@@ -1282,11 +1360,6 @@
       "shareFailed": "לא ניתן היה להעתיק את הקישור",
       "friend": "חבר/ה"
     },
-    "common": {
-      "dismiss": "סגירה",
-      "close": "סגירה",
-      "openSettings": "פתיחת ההגדרות לסקירת העדכון המותקן"
-    },
     "git2": {
       "allCommitted": "הכל מקומיט",
       "uncommittedFile": "{{count}} קובץ ללא commit",
@@ -1314,6 +1387,11 @@
     "update2": {
       "updateAvailable": "עדכון {{version}} זמין",
       "updateAvailableTip": "Cabinet {{version}} זמין"
+    },
+    "common": {
+      "dismiss": "סגירה",
+      "close": "סגירה",
+      "openSettings": "פתיחת ההגדרות לסקירת העדכון המותקן"
     }
   },
   "tasks": {
@@ -1351,84 +1429,6 @@
     "introTitle": "הכירו את ה-<accent>Cabinet</accent> שלכם.",
     "introSubtitle": "צוות ה-AI שלכם. בסיס הידע שלכם. מקום אחד.",
     "cabinetTitle": "Cabinet"
-  },
-  "helpVisuals": {
-    "cabinet": "Cabinet",
-    "yourTeam": "הצוות שלכם",
-    "lead": "ראש צוות",
-    "specialist": "מומחה",
-    "tasks": "משימות",
-    "todo": "ממתין",
-    "doing": "בעבודה",
-    "done": "הושלם",
-    "anythingGoes": "הכל מותר",
-    "marketing": "שיווק",
-    "product": "מוצר",
-    "research": "מחקר",
-    "design": "עיצוב",
-    "routines": "שגרות",
-    "dailyReview": "סקירה יומית",
-    "weeklyDigest": "סיכום שבועי",
-    "conversation": "שיחה",
-    "userQuery": "תכנן לי טיול של שבועיים בתאילנד…",
-    "agentReply": "אני אשלח את הלוקאליסט והעורך.",
-    "pendingAction": "פעולה ממתינה",
-    "approve": "אישור",
-    "decline": "דחייה",
-    "themes": "ערכות נושא",
-    "providers": "ספקים",
-    "comingSoon": "בקרוב"
-  },
-  "slideTasks": {
-    "slideNum": "03 · משימות",
-    "typedCommand": "הריצו 10 משימות, כל אחת כותבת שיר, שמרו ל-@Songs/",
-    "headlineSentence": "מוכנים <accent>להתחיל</accent>?",
-    "paragraphPrefix": "כתבו משימה. הריצו אחת, הריצו עשר, תזמנו לנצח. אזכרו דפים עם ",
-    "paragraphSuffix": ", שמרו את הפלט לאן שתרצו. עכשיו אתם הבמאי.",
-    "savingFolder": "Songs/"
-  },
-  "slideData": {
-    "thailandRootLabel": "טיול לתאילנד",
-    "thailandCaption": "כל הקבצים שלכם במקום אחד.",
-    "videoTitle": "Night market.mp4",
-    "taxRootLabel": "מס 2026",
-    "taxCaption": "מס 2026 — מחשבון אינטראקטיבי, משובץ בתוך הארונית שלכם.",
-    "calculatorTitle": "מחשבון",
-    "liveAppBadge": "אפליקציה חיה",
-    "taxEstimateLabel": "אומדן מס 2026",
-    "income": "הכנסה",
-    "deductions": "ניכויים",
-    "taxBracket": "מדרגת מס",
-    "estimatedTax": "מס משוער",
-    "healthRootLabel": "בריאות",
-    "healthCaption": "ויטמינים ובדיקות — גיליון שמרגיש כמו דף.",
-    "csvTitle": "ויטמינים יומיים.csv",
-    "csvColVitamin": "ויטמין",
-    "csvColDose": "מינון",
-    "csvColTime": "שעה",
-    "csvColDone": "בוצע",
-    "repoRootLabel": "cabinet-repo",
-    "repoCaption": "קודבייסים — קשרו כל ריפו ב-Git, חיפושי על-ידי הסוכנים שלכם.",
-    "schemaTitle": "schema.ts",
-    "tsBadge": "TS"
-  },
-  "slideDataCopy": {
-    "slideNum": "01 · נתונים",
-    "headlineSentence": "<accent>מקור האמת היחיד</accent> שלכם.",
-    "paragraphPrefix": "Markdown, PDFים, גיליונות, מצגות, תמונות, וידאו, אודיו, ריפואים מקושרים, אפליקציות אינטרנט משובצות, Google Docs. אזכרו כל אחד מהם עם ",
-    "paragraphSuffix": ".",
-    "secondParagraphPrefix": "מקום אחד להכל — כך אתם וצוות ה-AI קוראים, עורכים ומשגרים מאותם ",
-    "sameFiles": "קבצים",
-    "secondParagraphSuffix": ", לא מעותקים של עותקים.",
-    "mockTitle": "הארונית של הילה"
-  },
-  "scheduleTab": {
-    "explainer1": "כל מה שהצוות שלכם עושה השבוע, ביומן אחד. ורוד הוא heartbeat, ירוק הוא שגרה. לחצו על כל גלולה כדי לערוך.",
-    "explainer2": "השתמשו בטאב הזה כדי לזהות התנגשויות, למצוא קטעים שקטים, או פשוט לראות במבט אחד כמה הצוות עסוק.",
-    "aboutAria": "על לוח הזמנים",
-    "modeDay": "יום",
-    "modeWeek": "שבוע",
-    "modeMonth": "חודש"
   },
   "taskRail": {
     "title": "משימות אחרונות ופעילות",

@@ -325,6 +325,14 @@
     "heartbeats": "心跳",
     "noHeartbeats": "尚未設定任何心跳。"
   },
+  "scheduleTab": {
+    "explainer1": "你的團隊這週在做的一切,都在一個行事曆上。粉色是心跳,綠色是例行任務。點擊任意藥丸即可編輯。",
+    "explainer2": "用這個分頁發現衝突、找出空閒時段,或一眼看出團隊有多忙。",
+    "aboutAria": "關於排程",
+    "modeDay": "日",
+    "modeWeek": "週",
+    "modeMonth": "月"
+  },
   "mermaidViewer": {
     "zoomOut": "縮小",
     "zoomIn": "放大",
@@ -447,6 +455,49 @@
     "editor": "編輯器",
     "slashMenu": "斜線選單"
   },
+  "slideDataCopy": {
+    "slideNum": "01 · 資料",
+    "headlineSentence": "你<accent>唯一的事實來源</accent>。",
+    "paragraphPrefix": "Markdown、PDF、試算表、投影片、圖片、影片、音訊、連結的程式碼庫、嵌入的網頁應用、Google Docs。用 ",
+    "paragraphSuffix": " 提及它們中的任何一個。",
+    "secondParagraphPrefix": "一切都在一個地方 — 這樣你和你的 AI 團隊都從",
+    "sameFiles": "同一份檔案",
+    "secondParagraphSuffix": "裡讀、寫、發佈,而不是一層層的副本。",
+    "mockTitle": "Hila 的凱比內特"
+  },
+  "slideData": {
+    "thailandRootLabel": "泰國之旅",
+    "thailandCaption": "把你所有的檔案放在一個地方檢視。",
+    "videoTitle": "Night market.mp4",
+    "taxRootLabel": "2026 報稅",
+    "taxCaption": "2026 報稅 — 一個互動式的計算器網頁應用,直接嵌在你的凱比內特裡。",
+    "calculatorTitle": "計算機",
+    "liveAppBadge": "即時應用",
+    "taxEstimateLabel": "2026 稅額估算",
+    "income": "收入",
+    "deductions": "扣除",
+    "taxBracket": "稅級",
+    "estimatedTax": "預估稅額",
+    "healthRootLabel": "健康",
+    "healthCaption": "維他命與檢測 — 像頁面一樣好用的試算表。",
+    "csvTitle": "每日維他命.csv",
+    "csvColVitamin": "維他命",
+    "csvColDose": "劑量",
+    "csvColTime": "時間",
+    "csvColDone": "完成",
+    "repoRootLabel": "cabinet-repo",
+    "repoCaption": "程式碼庫 — 連結任何 Git 倉庫,智慧代理可以搜尋。",
+    "schemaTitle": "schema.ts",
+    "tsBadge": "TS"
+  },
+  "slideTasks": {
+    "slideNum": "03 · 任務",
+    "typedCommand": "跑 10 個任務,每個寫一首歌,儲存到 @Songs/",
+    "headlineSentence": "準備<accent>開始</accent>了嗎?",
+    "paragraphPrefix": "寫一個任務。跑一個、跑十個、永遠排程下去。用 ",
+    "paragraphSuffix": " 提及頁面,把輸出儲存到你想要的地方。現在你是導演。",
+    "savingFolder": "歌曲/"
+  },
   "slideAgents": {
     "persona": "角色",
     "heartbeat": "心跳",
@@ -456,6 +507,7 @@
     "otherOrganizer": "組織者",
     "idle": "閒置",
     "researchAnalyst": "研究分析師",
+    "modelLine": "Claude · Sonnet 4.6",
     "live": "線上",
     "personaBody": "「嚴謹的分析師。引用來源。標記互相衝突的說法。」",
     "heartbeatBody": "每 15 分鐘掃一遍 @Market Research",
@@ -563,6 +615,33 @@
   "agentList": {
     "agentLibrary": "智慧代理庫",
     "newAgent": "新增智慧代理"
+  },
+  "helpVisuals": {
+    "cabinet": "凱比內特",
+    "yourTeam": "你的團隊",
+    "lead": "主管",
+    "specialist": "專員",
+    "tasks": "任務",
+    "todo": "待辦",
+    "doing": "進行中",
+    "done": "已完成",
+    "anythingGoes": "什麼都行",
+    "marketing": "行銷",
+    "product": "產品",
+    "research": "研究",
+    "design": "設計",
+    "routines": "例行任務",
+    "dailyReview": "每日回顧",
+    "weeklyDigest": "每週摘要",
+    "conversation": "對話",
+    "userQuery": "幫我規劃一次為期兩週的泰國之旅……",
+    "agentReply": "我會派遣圖書管理員和編輯過去。",
+    "pendingAction": "待處理動作",
+    "approve": "核准",
+    "decline": "拒絕",
+    "themes": "主題",
+    "providers": "服務商",
+    "comingSoon": "即將推出"
   },
   "agentLive": {
     "dismiss": "關閉",
@@ -736,7 +815,6 @@
   "whatsNew": {
     "dismiss": "關閉",
     "headerPrefix": "v",
-    "headerSuffix": " 的新內容",
     "readFull": "閱讀完整版本說明"
   },
   "breakingChangesPlus": {
@@ -904,6 +982,10 @@
       "namePlaceholder": "凱比內特名稱……",
       "renameWarning": "凱比內特名稱之後無法重新命名(目前如此)。請慎重選擇。"
     },
+    "templates": {
+      "header": "從範本開始",
+      "browseAll": "瀏覽全部 →"
+    },
     "quickActions": {
       "shuffle": "顯示不同建議",
       "launch10Songs": "並行啟動 10 個寫歌編輯",
@@ -930,13 +1012,10 @@
     "greetingWithName": "{{greeting}},{{name}}。",
     "greetingNoName": "{{greeting}}。",
     "composerPlaceholder": "我想建立……",
-    "composerDaemonDown": "智慧代理守護程式離線 — 請重新啟動才能傳送",
-    "templates": {
-      "header": "從範本開始",
-      "browseAll": "瀏覽全部 →"
-    }
+    "composerDaemonDown": "智慧代理守護程式離線 — 請重新啟動才能傳送"
   },
   "onboarding": {
+    "launchHeading": "啟動你的 <accent>凱比內特</accent>",
     "intro": {
       "tagline1": "你的知識庫。",
       "tagline2": "你的 AI 團隊。",
@@ -972,8 +1051,7 @@
       "finish": "完成",
       "complete": "完成設定",
       "copyToClipboard": "複製到剪貼簿"
-    },
-    "launchHeading": "啟動你的 <accent>凱比內特</accent>"
+    }
   },
   "search": {
     "title": "搜尋",
@@ -1031,6 +1109,13 @@
       "appearance": "外觀",
       "updates": "更新",
       "about": "關於"
+    },
+    "page": {
+      "title": "設定",
+      "refresh": "重新整理",
+      "groupYou": "你",
+      "groupWorkspace": "工作區",
+      "groupApp": "應用程式"
     },
     "common": {
       "copyToClipboard": "複製到剪貼簿",
@@ -1164,13 +1249,6 @@
       "teamSize": "團隊規模",
       "teamSizePlaceholder": "單人 / 2–5 / 6–20 / 20+",
       "subtitle": "入门时記錄的内容。智能体在规划工作时会读取。"
-    },
-    "page": {
-      "title": "設定",
-      "refresh": "重新整理",
-      "groupYou": "你",
-      "groupWorkspace": "工作區",
-      "groupApp": "應用程式"
     }
   },
   "sidebar": {
@@ -1185,6 +1263,9 @@
     "agents": "智慧代理",
     "tasks": "任務",
     "missions": "任務",
+    "drawerData": "資料",
+    "drawerAgents": "團隊",
+    "drawerTasks": "任務",
     "goHome": "回到首頁",
     "brandWord": "卡比內特",
     "refresh": "重新整理側邊欄",
@@ -1198,10 +1279,7 @@
     "refreshFailed": "重新整理失敗。",
     "searchPlaceholder": "搜尋檔案…",
     "searchSearching": "搜尋中…",
-    "searchNoResults": "沒有符合「{{query}}」的檔案",
-    "drawerData": "資料",
-    "drawerAgents": "團隊",
-    "drawerTasks": "任務"
+    "searchNoResults": "沒有符合「{{query}}」的檔案"
   },
   "status": {
     "bar": {
@@ -1282,11 +1360,6 @@
       "shareFailed": "無法複製連結",
       "friend": "朋友"
     },
-    "common": {
-      "dismiss": "關閉",
-      "close": "關閉",
-      "openSettings": "開啟設定以查看已安裝的更新"
-    },
     "git2": {
       "allCommitted": "全部已提交",
       "uncommittedFile": "{{count}} 個未提交的檔案",
@@ -1314,6 +1387,11 @@
     "update2": {
       "updateAvailable": "{{version}} 版本可用",
       "updateAvailableTip": "凱比內特 {{version}} 可用"
+    },
+    "common": {
+      "dismiss": "關閉",
+      "close": "關閉",
+      "openSettings": "開啟設定以查看已安裝的更新"
     }
   },
   "tasks": {
@@ -1351,84 +1429,6 @@
     "introTitle": "認識你的 <accent>凱比內特</accent>。",
     "introSubtitle": "你的 AI 團隊。你的知識庫。一站搞定。",
     "cabinetTitle": "凱比內特"
-  },
-  "helpVisuals": {
-    "cabinet": "凱比內特",
-    "yourTeam": "你的團隊",
-    "lead": "主管",
-    "specialist": "專員",
-    "tasks": "任務",
-    "todo": "待辦",
-    "doing": "進行中",
-    "done": "已完成",
-    "anythingGoes": "什麼都行",
-    "marketing": "行銷",
-    "product": "產品",
-    "research": "研究",
-    "design": "設計",
-    "routines": "例行任務",
-    "dailyReview": "每日回顧",
-    "weeklyDigest": "每週摘要",
-    "conversation": "對話",
-    "userQuery": "幫我規劃一次為期兩週的泰國之旅……",
-    "agentReply": "我會派遣圖書管理員和編輯過去。",
-    "pendingAction": "待處理動作",
-    "approve": "核准",
-    "decline": "拒絕",
-    "themes": "主題",
-    "providers": "服務商",
-    "comingSoon": "即將推出"
-  },
-  "slideTasks": {
-    "slideNum": "03 · 任務",
-    "typedCommand": "跑 10 個任務,每個寫一首歌,儲存到 @Songs/",
-    "headlineSentence": "準備<accent>開始</accent>了嗎?",
-    "paragraphPrefix": "寫一個任務。跑一個、跑十個、永遠排程下去。用 ",
-    "paragraphSuffix": " 提及頁面,把輸出儲存到你想要的地方。現在你是導演。",
-    "savingFolder": "Songs/"
-  },
-  "slideData": {
-    "thailandRootLabel": "泰國之旅",
-    "thailandCaption": "把你所有的檔案放在一個地方檢視。",
-    "videoTitle": "Night market.mp4",
-    "taxRootLabel": "2026 報稅",
-    "taxCaption": "2026 報稅 — 一個互動式的計算器網頁應用,直接嵌在你的凱比內特裡。",
-    "calculatorTitle": "計算機",
-    "liveAppBadge": "即時應用",
-    "taxEstimateLabel": "2026 稅額估算",
-    "income": "收入",
-    "deductions": "扣除",
-    "taxBracket": "稅級",
-    "estimatedTax": "預估稅額",
-    "healthRootLabel": "健康",
-    "healthCaption": "維他命與檢測 — 像頁面一樣好用的試算表。",
-    "csvTitle": "每日維他命.csv",
-    "csvColVitamin": "維他命",
-    "csvColDose": "劑量",
-    "csvColTime": "時間",
-    "csvColDone": "完成",
-    "repoRootLabel": "cabinet-repo",
-    "repoCaption": "程式碼庫 — 連結任何 Git 倉庫,智慧代理可以搜尋。",
-    "schemaTitle": "schema.ts",
-    "tsBadge": "TS"
-  },
-  "slideDataCopy": {
-    "slideNum": "01 · 資料",
-    "headlineSentence": "你<accent>唯一的事實來源</accent>。",
-    "paragraphPrefix": "Markdown、PDF、試算表、投影片、圖片、影片、音訊、連結的程式碼庫、嵌入的網頁應用、Google Docs。用 ",
-    "paragraphSuffix": " 提及它們中的任何一個。",
-    "secondParagraphPrefix": "一切都在一個地方 — 這樣你和你的 AI 團隊都從",
-    "sameFiles": "同一份檔案",
-    "secondParagraphSuffix": "裡讀、寫、發佈,而不是一層層的副本。",
-    "mockTitle": "Hila 的凱比內特"
-  },
-  "scheduleTab": {
-    "explainer1": "你的團隊這週在做的一切,都在一個行事曆上。粉色是心跳,綠色是例行任務。點擊任意藥丸即可編輯。",
-    "explainer2": "用這個分頁發現衝突、找出空閒時段,或一眼看出團隊有多忙。",
-    "aboutAria": "關於排程",
-    "modeDay": "日",
-    "modeWeek": "週",
-    "modeMonth": "月"
   },
   "taskRail": {
     "title": "最近與執行中的任務",
