@@ -8,6 +8,7 @@ import { flattenTree } from "@/lib/tree-utils";
 import { createConversation } from "@/lib/agents/conversation-client";
 import { fetchCabinetOverviewClient } from "@/lib/cabinets/overview-client";
 import { ComposerInput } from "@/components/composer/composer-input";
+import { useComposerAttachments } from "@/components/composer/use-composer-attachments";
 import {
   TaskRuntimePicker,
   type TaskRuntimeSelection,
@@ -110,10 +111,34 @@ export function TaskComposeBody({ context }: TaskComposeBodyProps) {
     return [lead, ...others];
   }, [agents, editorScoped]);
 
+  // No cabinet context in this drawer — mirror the home composer and stage
+  // attachments under the root cabinet's _pending/<uuid> dir until submit
+  // hands them to the new conversation.
+  const stagingClientUuid = useMemo(
+    () =>
+      typeof crypto !== "undefined" && "randomUUID" in crypto
+        ? crypto.randomUUID()
+        : `c-${Date.now()}`,
+    []
+  );
+  const attachments = useComposerAttachments({
+    cabinetPath: undefined,
+    clientAttachmentId: stagingClientUuid,
+  });
+
   const composer = useComposer({
     items: mentionItems,
     pinnedPagePath,
-    onSubmit: async ({ message, mentionedPaths, mentionedAgents, mentionedSkills }) => {
+    attachments,
+    stagingClientUuid,
+    onSubmit: async ({
+      message,
+      mentionedPaths,
+      mentionedAgents,
+      mentionedSkills,
+      attachmentPaths,
+      stagingClientUuid: turnStagingUuid,
+    }) => {
       // @-mention wins; otherwise the picker (empty slug = Auto = editor
       // fallback, mirroring the home composer).
       const mentionTarget = mentionedAgents.length > 0 ? mentionedAgents[0] : null;
@@ -129,6 +154,8 @@ export function TaskComposeBody({ context }: TaskComposeBodyProps) {
               userMessage: message,
               mentionedPaths,
               mentionedSkills,
+              attachmentPaths,
+              stagingClientUuid: turnStagingUuid,
               ...taskRuntime,
             }
           : {
@@ -136,6 +163,8 @@ export function TaskComposeBody({ context }: TaskComposeBodyProps) {
               userMessage: message,
               mentionedPaths,
               mentionedSkills,
+              attachmentPaths,
+              stagingClientUuid: turnStagingUuid,
               ...taskRuntime,
             }
       );
@@ -169,6 +198,7 @@ export function TaskComposeBody({ context }: TaskComposeBodyProps) {
             items={mentionItems}
             showKeyHint={false}
             autoFocus
+            attachments={attachments}
             actionsStart={
               <>
                 <AgentPicker
