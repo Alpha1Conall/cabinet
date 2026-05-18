@@ -88,11 +88,17 @@ async function moveResolvedEntry(
 
   if (sourceStat.isSymbolicLink()) {
     const target = await fs.readlink(fromResolved);
+    const symlinkTarget = path.isAbsolute(target)
+      ? target
+      : path.relative(
+          path.dirname(toResolved),
+          path.resolve(path.dirname(fromResolved), target)
+        );
     const targetStat = await fs.stat(fromResolved).catch(() => null);
     const symlinkType = process.platform === "win32"
       ? (targetStat?.isDirectory() ? "junction" : "file")
       : undefined;
-    await fs.symlink(target, toResolved, symlinkType);
+    await fs.symlink(symlinkTarget, toResolved, symlinkType);
     await fs.unlink(fromResolved);
     return;
   }

@@ -46,7 +46,7 @@ import {
   agentAdapterRegistry,
   resolveLegacyExecutionProviderId,
 } from "../src/lib/agents/adapters";
-import { RUNTIME_PATH } from "../src/lib/agents/provider-cli";
+import { getRuntimePath } from "../src/lib/agents/provider-cli";
 import {
   appendConversationTranscript,
   cleanupStaleStagingAttachments,
@@ -185,7 +185,7 @@ console.log("Initializing Cabinet database...");
 getDb();
 console.log("Database ready.");
 
-const enrichedPath = RUNTIME_PATH;
+const enrichedPath = getRuntimePath();
 
 // ===== Session orchestration =====
 // PTY-specific types + lifecycle helpers live in server/pty/*. The daemon

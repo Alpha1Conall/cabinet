@@ -1,4 +1,4 @@
-import { execFile, execSync, spawn } from "child_process";
+import { execFile, execFileSync, spawn } from "child_process";
 import fs from "fs";
 import path from "path";
 import { getNvmNodeBin } from "../nvm-path";
@@ -33,7 +33,11 @@ function buildAdapterRuntimePath(
   ].filter(Boolean).join(":");
 }
 
-export const ADAPTER_RUNTIME_PATH = buildAdapterRuntimePath();
+export function getAdapterRuntimePath(): string {
+  return buildAdapterRuntimePath();
+}
+
+export const ADAPTER_RUNTIME_PATH = getAdapterRuntimePath();
 
 export interface RunChildProcessOptions {
   cwd: string;
@@ -70,7 +74,7 @@ export function withAdapterRuntimeEnv(
   return {
     ...fileValues,
     ...env,
-    PATH: ADAPTER_RUNTIME_PATH,
+    PATH: getAdapterRuntimePath(),
   };
 }
 
@@ -86,7 +90,7 @@ export function resolveCommandFromCandidates(
         continue;
       }
       try {
-        const resolved = execSync(`test -x ${JSON.stringify(candidate)} && printf '%s' ${JSON.stringify(candidate)}`, {
+        const resolved = execFileSync("/bin/sh", ["-c", "test -x \"$1\" && printf '%s' \"$1\"", "sh", candidate], {
           encoding: "utf8",
           env: withAdapterRuntimeEnv(env),
           stdio: ["ignore", "pipe", "ignore"],
@@ -101,12 +105,12 @@ export function resolveCommandFromCandidates(
     try {
       const resolved =
         process.platform === "win32"
-          ? execSync(`where ${candidate}`, {
+          ? execFileSync("where.exe", [candidate], {
               encoding: "utf8",
               env: withAdapterRuntimeEnv(env),
               stdio: ["ignore", "pipe", "ignore"],
             }).trim().split(/\r?\n/).find(Boolean) || ""
-          : execSync(`command -v ${candidate}`, {
+          : execFileSync("/bin/sh", ["-c", "command -v \"$1\"", "sh", candidate], {
               encoding: "utf8",
               env: withAdapterRuntimeEnv(env),
               stdio: ["ignore", "pipe", "ignore"],

@@ -1,7 +1,7 @@
 import { spawn } from "child_process";
 import type { AgentProvider, CliProviderInvocation } from "./provider-interface";
 import { providerRegistry } from "./provider-registry";
-import { buildWindowsShellCommand, resolveCliCommand, RUNTIME_PATH } from "./provider-cli";
+import { buildWindowsShellCommand, getRuntimePath, resolveCliCommand } from "./provider-cli";
 import { terminateChildProcess } from "./process-utils";
 import {
   resolveDetachedPromptLaunchMode,
@@ -157,7 +157,7 @@ export async function runOneShotProviderPrompt(input: {
   return new Promise<string>((resolve, reject) => {
     const env = {
       ...process.env,
-      PATH: RUNTIME_PATH,
+      PATH: getRuntimePath(),
     };
     const proc =
       process.platform === "win32"

@@ -1,7 +1,7 @@
 import { spawn } from "child_process";
 import { NextResponse } from "next/server";
 import { providerRegistry } from "@/lib/agents/provider-registry";
-import { ADAPTER_RUNTIME_PATH } from "@/lib/agents/adapters/utils";
+import { getAdapterRuntimePath } from "@/lib/agents/adapters/utils";
 import { emit as emitTelemetry } from "@/lib/telemetry";
 
 type VerifyStatus =
@@ -179,7 +179,7 @@ function runShellCommand(command: string): Promise<{
     const child = spawn("/bin/sh", ["-c", command], {
       env: {
         ...process.env,
-        PATH: ADAPTER_RUNTIME_PATH,
+        PATH: getAdapterRuntimePath(),
       },
       stdio: ["ignore", "pipe", "pipe"],
     });

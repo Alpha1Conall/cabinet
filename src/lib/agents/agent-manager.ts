@@ -1,7 +1,7 @@
 import { spawn, type ChildProcess } from "child_process";
 import path from "path";
 import { DATA_DIR } from "@/lib/storage/path-utils";
-import { buildWindowsShellCommand, RUNTIME_PATH } from "./provider-cli";
+import { buildWindowsShellCommand, getRuntimePath } from "./provider-cli";
 import { getOneShotLaunchSpec } from "./provider-runtime";
 import { terminateChildProcess } from "./process-utils";
 
@@ -89,7 +89,7 @@ export async function runAgent(
   });
   const env = {
     ...process.env,
-    PATH: RUNTIME_PATH,
+    PATH: getRuntimePath(),
   };
   const proc =
     process.platform === "win32"

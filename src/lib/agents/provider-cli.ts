@@ -84,7 +84,9 @@ export function buildRuntimePath(options?: {
   ].filter(Boolean).join(delimiter);
 }
 
-export const RUNTIME_PATH = buildRuntimePath();
+export function getRuntimePath(): string {
+  return buildRuntimePath();
+}
 
 function quoteWindowsCmdArg(value: string): string {
   const escaped = value.replace(/"/g, '""').replace(/%/g, "%%");
@@ -225,7 +227,7 @@ export async function checkCliProviderAvailable(provider: AgentProvider): Promis
       return;
     }
 
-    const env = withAdapterRuntimeEnv({ ...process.env, PATH: RUNTIME_PATH });
+    const env = withAdapterRuntimeEnv({ ...process.env, PATH: getRuntimePath() });
     const proc =
       process.platform === "win32"
         ? spawn(buildWindowsShellCommand(command, ["--version"]), {
@@ -268,7 +270,7 @@ export async function execCli(
 ): Promise<string> {
   const timeoutMs = options.timeout ?? 5000;
   return new Promise((resolve, reject) => {
-    const env = withAdapterRuntimeEnv({ ...process.env, PATH: RUNTIME_PATH });
+    const env = withAdapterRuntimeEnv({ ...process.env, PATH: getRuntimePath() });
     const proc =
       process.platform === "win32"
         ? spawn(buildWindowsShellCommand(command, args), {

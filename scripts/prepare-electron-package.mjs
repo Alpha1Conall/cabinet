@@ -14,7 +14,12 @@ const daemonMigrationsDir = path.join(standaloneServerDir, "migrations");
 const stagedNativeDir = path.join(standaloneDir, ".native");
 const stagedNodePtyDir = path.join(stagedNativeDir, "node-pty");
 const stagedSeedDir = path.join(standaloneDir, ".seed");
-const bundledNodeBinaryName = process.platform === "win32" ? "node.exe" : "node";
+const targetPlatform =
+  process.env.CABINET_ELECTRON_TARGET_PLATFORM ||
+  process.env.npm_config_platform ||
+  process.argv.find((arg) => arg.startsWith("--platform="))?.split("=", 2)[1] ||
+  process.platform;
+const bundledNodeBinaryName = targetPlatform === "win32" ? "node.exe" : "node";
 const bundledNodeBinaryPath = path.join(standaloneBinDir, bundledNodeBinaryName);
 const rootNodePtyDir = path.join(projectRoot, "node_modules", "node-pty");
 const dataDir = path.join(projectRoot, "data");
@@ -163,7 +168,7 @@ async function stageDaemonRuntime() {
   // to userData for Gatekeeper; on Windows the packaged .native directory is
   // used directly via NODE_PATH.
   const prebuildDirs =
-    process.platform === "win32"
+    targetPlatform === "win32"
       ? ["win32-x64", "win32-arm64"]
       : ["darwin-arm64", "darwin-x64"];
 
@@ -178,7 +183,7 @@ async function stageDaemonRuntime() {
     copyFile(path.join(rootNodePtyDir, "package.json"), path.join(stagedNodePtyDir, "package.json")),
   ]);
 
-  if (process.platform === "darwin") {
+  if (targetPlatform === "darwin") {
     for (const dirName of ["darwin-arm64", "darwin-x64"]) {
       const helperPath = path.join(stagedNodePtyDir, "prebuilds", dirName, "spawn-helper");
       if (await pathExists(helperPath)) {
