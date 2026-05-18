@@ -11,6 +11,13 @@ import {
   resolveCliCommand,
 } from "./provider-cli";
 
+function testEnv(values: Record<string, string>): NodeJS.ProcessEnv {
+  return {
+    ...values,
+    NODE_ENV: "test",
+  };
+}
+
 async function createExecutableScript(source: string): Promise<string> {
   const dir = await fs.mkdtemp(path.join(os.tmpdir(), "cabinet-provider-cli-test-"));
   const scriptPath = path.join(
@@ -50,6 +57,50 @@ test("resolveCliCommand prefers an existing command candidate path", async () =>
   assert.equal(resolveCliCommand(provider), scriptPath);
 });
 
+test("resolveCliCommand skips non-executable POSIX command candidate paths", async (t) => {
+  if (process.platform === "win32") {
+    t.skip("POSIX executable bits are not meaningful on Windows");
+    return;
+  }
+
+  const dir = await fs.mkdtemp(path.join(os.tmpdir(), "cabinet-provider-cli-test-"));
+  const scriptPath = path.join(dir, "fake-provider.sh");
+  await fs.writeFile(scriptPath, "#!/bin/sh\nexit 0\n", "utf8");
+  await fs.chmod(scriptPath, 0o644);
+
+  const provider: AgentProvider = {
+    id: "test-cli-provider",
+    name: "Test CLI Provider",
+    type: "cli",
+    icon: "bot",
+    command: "fallback-provider",
+    commandCandidates: [scriptPath, "fallback-provider"],
+    async isAvailable() {
+      return true;
+    },
+    async healthCheck() {
+      return {
+        available: true,
+        authenticated: true,
+        version: "test",
+      };
+    },
+  };
+
+  const resolved = resolveCliCommand(provider, {
+    platform: "linux",
+    env: testEnv({
+      HOME: "/tmp/test-user",
+      PATH: "/usr/bin",
+    }),
+    commandLookup(command) {
+      return command === "fallback-provider" ? "/usr/bin/fallback-provider" : null;
+    },
+  });
+
+  assert.equal(resolved, "/usr/bin/fallback-provider");
+});
+
 test("checkCliProviderAvailable uses resolved command candidates", async () => {
   const scriptPath = await createExecutableScript("#!/bin/sh\nexit 0\n");
   const provider: AgentProvider = {
@@ -77,11 +128,11 @@ test("checkCliProviderAvailable uses resolved command candidates", async () => {
 test("buildRuntimePath uses Windows delimiters and npm global bin paths", () => {
   const runtimePath = buildRuntimePath({
     platform: "win32",
-    env: {
+    env: testEnv({
       USERPROFILE: "C:\\Users\\TestUser",
       APPDATA: "C:\\Users\\TestUser\\AppData\\Roaming",
       PATH: "C:\\Windows\\System32",
-    },
+    }),
     nvmBin: null,
   });
 
@@ -98,11 +149,11 @@ test("buildRuntimePath uses Windows delimiters and npm global bin paths", () => 
 test("buildRuntimePath uses requested platform path semantics even on a different host OS", () => {
   const runtimePath = buildRuntimePath({
     platform: "win32",
-    env: {
+    env: testEnv({
       USERPROFILE: "C:/Users/TestUser",
       APPDATA: "C:/Users/TestUser/AppData/Roaming",
       PATH: "C:/Windows/System32",
-    },
+    }),
     nvmBin: "C:/Users/TestUser/.nvm/bin",
   });
 
@@ -120,10 +171,10 @@ test("buildRuntimePath uses requested platform path semantics even on a differen
 test("buildRuntimePath uses POSIX separators when a POSIX platform is requested", () => {
   const runtimePath = buildRuntimePath({
     platform: "linux",
-    env: {
+    env: testEnv({
       HOME: "/home/test-user",
       PATH: "/usr/bin",
-    },
+    }),
     nvmBin: "/home/test-user/.nvm/versions/node/v22/bin",
   });
 
@@ -142,11 +193,11 @@ test("buildRuntimePath uses POSIX separators when a POSIX platform is requested"
 test("buildCommandCandidates only returns Windows cmd paths plus bare command", () => {
   const candidates = buildCommandCandidates("codex", {
     platform: "win32",
-    env: {
+    env: testEnv({
       USERPROFILE: "C:/Users/TestUser",
       APPDATA: "C:/Users/TestUser/AppData/Roaming",
       PATH: "C:/Windows/System32",
-    },
+    }),
     nvmBin: "C:/Users/TestUser/.nvm/bin",
   });
 
@@ -180,11 +231,11 @@ test("resolveCliCommand prefers a bare Windows command when it is on PATH", () =
 
   const resolved = resolveCliCommand(provider, {
     platform: "win32",
-    env: {
+    env: testEnv({
       USERPROFILE: "C:\\Users\\TestUser",
       APPDATA: "C:\\Users\\TestUser\\AppData\\Roaming",
       PATH: "C:\\Windows\\System32",
-    },
+    }),
     commandLookup(command) {
       assert.equal(command, "codex");
       return "C:\\Users\\TestUser\\AppData\\Roaming\\npm\\codex.cmd";
@@ -217,10 +268,10 @@ test("resolveCliCommand skips unsafe non-path command candidates during lookup",
   const lookupCalls: string[] = [];
   const resolved = resolveCliCommand(provider, {
     platform: "linux",
-    env: {
+    env: testEnv({
       HOME: "/tmp/test-user",
       PATH: "/usr/bin",
-    },
+    }),
     commandLookup(command) {
       lookupCalls.push(command);
       return command === "safe-provider" ? "/usr/bin/safe-provider" : null;

@@ -35,6 +35,19 @@ function isSafeCommandName(candidate: string): boolean {
   return /^[A-Za-z0-9._/-]+$/.test(candidate);
 }
 
+function candidateExistsAndIsRunnable(candidate: string, platform: NodeJS.Platform): boolean {
+  if (platform === "win32") {
+    return fs.existsSync(candidate);
+  }
+
+  try {
+    fs.accessSync(candidate, fs.constants.X_OK);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 function getPlatformPathTools(platform: NodeJS.Platform) {
   return {
     api: platform === "win32" ? path.win32 : path.posix,
@@ -183,7 +196,9 @@ export function resolveCliCommand(provider: AgentProvider, options?: ResolveCliC
   }
 
   for (const candidate of candidates) {
-    if (isExplicitPath(candidate) && fs.existsSync(candidate)) return candidate;
+    if (isExplicitPath(candidate) && candidateExistsAndIsRunnable(candidate, platform)) {
+      return candidate;
+    }
   }
 
   for (const candidate of candidates) {
