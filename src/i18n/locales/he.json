@@ -1411,6 +1411,10 @@
       "connect": "התחבר",
       "recommended": "מומלץ"
     },
+    "integrationsPreview": {
+      "comingSoon": "בקרוב",
+      "hint": "חיבור אינטגרציות חיצוניות וכלים מובנים יגיע בקרוב."
+    },
     "storage": {
       "dataDirectory": "ספריית נתונים",
       "restartRequired": "נדרשת הפעלה מחדש",

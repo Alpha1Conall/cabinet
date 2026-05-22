@@ -1411,6 +1411,10 @@
       "connect": "Connect",
       "recommended": "Recommended"
     },
+    "integrationsPreview": {
+      "comingSoon": "Coming soon",
+      "hint": "Connecting external integrations and built-in tools is on the way."
+    },
     "storage": {
       "dataDirectory": "Data Directory",
       "restartRequired": "Restart required",
