@@ -541,18 +541,15 @@ export function AppShell() {
     return raw.trim().split(/\s+/)[0];
   }, [profileState]);
 
-  // Post-tour first task: a friendly, templated opener shown as the composer
-  // placeholder (a suggestion the user can send or rewrite, not a pre-filled
-  // value). The agent learns the user's goal by asking, so we don't need to
-  // interpolate it here.
-  const tourStarterPlaceholder = useMemo(() => {
-    const hi = userFirstName ? `Hi, I'm ${userFirstName}! ` : "Hi! ";
-    return (
-      `${hi}I just created this Cabinet and I want it to help me get my work done. ` +
-      "Tell me about your goals - what work would you like to accomplish? " +
-      "Create useful pages, beautiful dashboards, and web apps for me."
-    );
-  }, [userFirstName]);
+  // Post-tour first task: a warm, teammate-voiced opener shown as the composer
+  // placeholder (evocative empty-state text, not a pre-filled value). Name-free
+  // on purpose, so it never surfaces a stale or awkward profile name.
+  const tourStarterPlaceholder = useMemo(
+    () =>
+      "Hi, I'm your teammate. I've just joined your Cabinet and I'm ready to get to work. " +
+      "What would you like to accomplish? I can create useful pages, beautiful dashboards, and web apps for you.",
+    []
+  );
 
   useEffect(() => {
     const handler = (e: Event) => {
