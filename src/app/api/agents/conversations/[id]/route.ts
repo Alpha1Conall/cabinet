@@ -40,11 +40,21 @@ export async function DELETE(
 ) {
   const { id } = await params;
   const cabinetPath = req.nextUrl.searchParams.get("cabinetPath") || undefined;
-  const deleted = await deleteConversation(id, cabinetPath);
+  const meta = await readConversationMeta(id, cabinetPath);
+  if (!meta) {
+    return NextResponse.json({ error: "Conversation not found" }, { status: 404 });
+  }
 
+  const deleted = await deleteConversation(id, cabinetPath);
   if (!deleted) {
     return NextResponse.json({ error: "Conversation not found" }, { status: 404 });
   }
+
+  publishConversationEvent({
+    type: "task.deleted",
+    taskId: id,
+    cabinetPath: meta.cabinetPath ?? cabinetPath,
+  });
 
   return NextResponse.json({ ok: true });
 }

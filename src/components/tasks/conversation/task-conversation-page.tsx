@@ -388,7 +388,6 @@ export interface TaskConversationPageProps {
   returnContext?: import("@/stores/app-store").SelectedSection;
 }
 
-/** Dev-only on-page log strip — survives Next.js removeConsole for console.log. */
 export function TaskConversationPage({
   taskId,
   cabinetPath,
@@ -1110,7 +1109,7 @@ export function TaskConversationPage({
     setBusy(true);
     try {
       await deleteConversation(taskId, task.meta.cabinetPath);
-      if (typeof window !== "undefined") {
+      if (variant === "full" && typeof window !== "undefined") {
         window.location.hash = "#/";
       }
     } catch (e) {
@@ -1118,7 +1117,7 @@ export function TaskConversationPage({
     } finally {
       setBusy(false);
     }
-  }, [task, isDemo, taskId]);
+  }, [task, isDemo, taskId, variant]);
 
   if (loadError && !task) {
     return (
