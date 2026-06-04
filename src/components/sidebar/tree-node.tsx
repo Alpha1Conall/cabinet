@@ -203,7 +203,7 @@ function TreeNodeImpl({
     // filename instead (same as what "Copy Full Path" gives minus the directory).
     const driveAbsPath = decodeDrivePath(node.path);
     if (driveAbsPath !== null) {
-      void navigator.clipboard.writeText(driveAbsPath.split("/").pop() ?? driveAbsPath);
+      void navigator.clipboard.writeText(driveAbsPath.split(/[/\\]/).pop() ?? driveAbsPath);
       return;
     }
     void navigator.clipboard.writeText(node.path);
