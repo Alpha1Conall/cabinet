@@ -25,9 +25,13 @@ export interface JobConfig {
   updatedAt: string;
   /** One-shot job: auto-disable after first successful fire. */
   oneShot?: boolean;
-  /** ISO datetime this job was created to run at (informational; the cron
-   *  expression is the actual trigger). */
+  /** ISO datetime this job was created to run at. Canonical instant for a
+   *  one-off (the cron expression is just the trigger). */
   runAfter?: string;
+  /** Per-occurrence exceptions (iCalendar EXDATE): ISO instants of recurring
+   *  occurrences that have been moved/suppressed. The calendar hides these and
+   *  the run handler skips them server-side. */
+  exceptions?: string[];
   /** Conversation id that dispatched this job via an agent action. */
   ownerTaskId?: string;
 }

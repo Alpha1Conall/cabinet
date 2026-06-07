@@ -11,6 +11,7 @@ import {
   normalizeJobConfig,
 } from "@/lib/jobs/job-normalization";
 import { normalizeCabinetPath } from "@/lib/cabinets/paths";
+import { minuteIso } from "@/lib/agents/cron-compute";
 
 export async function GET(
   req: NextRequest,
@@ -58,6 +59,17 @@ export async function PUT(
       if (cabinetPath) existing.cabinetPath = cabinetPath;
       const scheduledAt =
         typeof body.scheduledAt === "string" ? body.scheduledAt : undefined;
+      // Per-occurrence exception (EXDATE): a recurring job whose owner moved
+      // THIS occurrence elsewhere records the original instant in `exceptions`.
+      // The cron still fires on that minute, so suppress the run here — hiding
+      // it in the calendar alone would let the original occurrence still run.
+      if (
+        scheduledAt &&
+        Array.isArray(existing.exceptions) &&
+        existing.exceptions.some((iso) => minuteIso(iso) === minuteIso(scheduledAt))
+      ) {
+        return NextResponse.json({ ok: true, skipped: "exception" });
+      }
       const run = await executeJob(existing, { scheduledAt });
       return NextResponse.json({ ok: true, run });
     }

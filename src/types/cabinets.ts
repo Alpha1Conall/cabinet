@@ -66,6 +66,12 @@ export interface CabinetJobSummary {
   enabled: boolean;
   schedule: string;
   prompt?: string;
+  /** One-off marker — auto-disabled after its single fire. */
+  oneShot?: boolean;
+  /** Canonical instant for a one-off task (ISO). The calendar renders here. */
+  runAfter?: string;
+  /** Per-occurrence exceptions (ISO instants) hidden from the calendar. */
+  exceptions?: string[];
   cabinetPath: string;
   cabinetName: string;
   cabinetDepth: number;

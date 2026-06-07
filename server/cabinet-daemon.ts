@@ -1219,34 +1219,39 @@ function scheduleJob(job: JobConfig): void {
   const task = cron.schedule(job.schedule, () => {
     const scheduledAt = new Date(Math.round(Date.now() / 60000) * 60000).toISOString();
     console.log(`Triggering scheduled job ${key} @ ${scheduledAt}`);
+    // Disable a one-shot after it has fired — on BOTH success and failure. A
+    // one-off cron (`m h dom mon *`) would otherwise re-match a year later; a
+    // failed run must not leave it armed for that rollover.
+    const disableIfOneShot = async () => {
+      if (!job.oneShot) return;
+      try {
+        await putJson(
+          `${getAppOrigin()}/api/agents/${job.agentSlug}/jobs/${job.id}`,
+          {
+            action: "update",
+            cabinetPath: job.cabinetPath,
+            enabled: false,
+          }
+        );
+      } catch (error) {
+        console.error(`Failed to disable one-shot job ${key}:`, error);
+      }
+      const existing = scheduledJobs.get(key);
+      if (existing) existing.stop();
+      scheduledJobs.delete(key);
+      console.log(`  One-shot job fired and disabled: ${key}`);
+    };
     void putJson(`${getAppOrigin()}/api/agents/${job.agentSlug}/jobs/${job.id}`, {
       action: "run",
       source: "scheduler",
       cabinetPath: job.cabinetPath,
       scheduledAt,
     })
-      .then(async () => {
-        if (job.oneShot) {
-          try {
-            await putJson(
-              `${getAppOrigin()}/api/agents/${job.agentSlug}/jobs/${job.id}`,
-              {
-                action: "update",
-                cabinetPath: job.cabinetPath,
-                enabled: false,
-              }
-            );
-          } catch (error) {
-            console.error(`Failed to disable one-shot job ${key}:`, error);
-          }
-          const existing = scheduledJobs.get(key);
-          if (existing) existing.stop();
-          scheduledJobs.delete(key);
-          console.log(`  One-shot job fired and disabled: ${key}`);
-        }
-      })
       .catch((error) => {
         console.error(`Failed to trigger scheduled job ${key}:`, error);
+      })
+      .finally(() => {
+        void disableIfOneShot();
       });
   });
 
