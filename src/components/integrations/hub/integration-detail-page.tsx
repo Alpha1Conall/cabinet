@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils";
 import { showSuccess } from "@/lib/ui/toast";
 import { ConnectPanel } from "@/components/integrations/hub/connect-panel";
 import { SetupGuide } from "@/components/integrations/hub/setup-guide";
-import { DiscordStepArt } from "@/components/integrations/hub/discord-setup-art";
+import { stepArtFor } from "@/components/integrations/hub/generic-setup-art";
 import { getCatalogEntry } from "@/lib/agents/mcp-catalog";
 import {
   CATEGORY_META,
@@ -113,11 +113,14 @@ export function IntegrationDetailPage({
             <SetupGuide
               steps={entry.setupSteps}
               brand={item.brand}
-              art={
-                item.id === "discord"
-                  ? (i) => <DiscordStepArt step={i} brand={item.brand} />
-                  : undefined
-              }
+              art={stepArtFor({
+                id: item.id,
+                label: item.name,
+                brand: item.brand,
+                authBackend: entry.authBackend,
+                transport: entry.transport,
+                hasUrlCredential: !!entry.urlCredentialKey,
+              })}
             />
           ) : null}
 
