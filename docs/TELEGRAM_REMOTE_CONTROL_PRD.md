@@ -202,6 +202,7 @@ Commands:
 | `/agents` | List personas in the active room (`listPersonas()`) with emoji + role, marking the orchestrator. Each entry shows its `@slug` so you can target it (see `@slug` below). |
 | `/room [<slug>]` | No arg: show current room + available rooms (`listRooms()`). With a slug: switch the chat's active cabinet. Unknown slug → list options. |
 | `/verbose` | Toggle live tool-use/reasoning streaming for this chat (default off → concise). Reply confirms the new state. |
+| `/model [<provider> [<model>]]` | Added 2026-06-11. No args: show the current runtime + every registered provider with its model ids. With args: per-chat runtime override (provider registry validated; switching providers picks that provider's default adapter; the model rides `adapterConfig` on starts and the per-turn override on continues, which forces replay mode upstream). `/model reset` returns to each agent's persona default. Sticky across `/new` and `/room`. |
 | _text_ | Run the orchestrator with the message as the request; stream the reply. |
 | `@slug <text>` | Run this one message against persona `<slug>` instead of the orchestrator. Unknown slug → fall back to orchestrator with a note. Next plain message reverts to orchestrator. |
 | _file / photo_ | Download via `getFile`, stage under the active room, attach to the **next** text message's run. Ack with "📎 attached, what should I do with it?" |

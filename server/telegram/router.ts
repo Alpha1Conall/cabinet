@@ -35,6 +35,8 @@ import {
   readPersona,
   type AgentPersona,
 } from "../../src/lib/agents/persona-manager";
+import { providerRegistry } from "../../src/lib/agents/provider-registry";
+import { defaultAdapterTypeForProvider } from "../../src/lib/agents/adapters";
 import { getHomeConfig, listRooms } from "../../src/lib/cabinets/rooms";
 import { DATA_DIR } from "../../src/lib/storage/path-utils";
 import { runSearch, type SearchSources } from "../search/search-service";
@@ -204,6 +206,7 @@ async function handleCommand(
           "/agents - list agents you can @-target",
           "/room [<slug>] - show or switch the active room",
           "/verbose - toggle live output streaming",
+          "/model [<provider> [<model>]] - show or override the AI runtime",
           "/welcome - show the welcome guide again",
           "",
           `Plain text runs ${orchestrator} in ${roomLabel(state)}.`,
@@ -236,6 +239,11 @@ async function handleCommand(
         lines.push(`📎 ${state.stagedAttachments.length} file(s) staged for the next message.`);
       }
       lines.push(`Room: ${roomLabel(state)} · Verbose: ${state.verbose ? "on" : "off"}`);
+      if (state.providerOverride) {
+        lines.push(
+          `Runtime: ${state.providerOverride}${state.modelOverride ? ` · ${state.modelOverride}` : ""} (set via /model)`
+        );
+      }
       await safeSend(ctx, state.chatId, lines.join("\n"));
       return;
     }
@@ -268,6 +276,10 @@ async function handleCommand(
           ? "🔊 Verbose on. Streaming live output."
           : "🔇 Verbose off. Concise replies only."
       );
+      return;
+    }
+    case "/model": {
+      await runModelCommand(ctx, state, arg);
       return;
     }
     default:
@@ -337,6 +349,84 @@ async function runRoomCommand(ctx: RouterContext, state: ChatState, arg: string)
   }
   switchRoom(state, match.path);
   await safeSend(ctx, state.chatId, `📂 Switched to room "${match.name}". Fresh conversation.`);
+}
+
+// ---------------------------------------------------------------------------
+// Runtime override (/model)
+// ---------------------------------------------------------------------------
+
+async function runModelCommand(ctx: RouterContext, state: ChatState, arg: string): Promise<void> {
+  const providers = providerRegistry.listAll();
+
+  if (!arg) {
+    const current = state.providerOverride
+      ? `${state.providerOverride}${state.modelOverride ? ` · ${state.modelOverride}` : ""}`
+      : "each agent's own default";
+    const lines = providers.map((p) => {
+      const models = (p.models ?? []).map((m) => m.id).join(", ");
+      return `• ${p.id}${models ? `: ${models}` : ""}`;
+    });
+    await safeSend(
+      ctx,
+      state.chatId,
+      [
+        `Current runtime: ${current}.`,
+        "",
+        "Providers and models:",
+        ...lines,
+        "",
+        "Set with /model <provider> [<model>], e.g. /model claude-code sonnet.",
+        "Back to the defaults with /model reset.",
+      ].join("\n")
+    );
+    return;
+  }
+
+  const [providerArg, ...modelParts] = arg.split(/\s+/);
+  const modelArg = modelParts.join(" ").trim();
+
+  if (/^(reset|default)$/i.test(providerArg)) {
+    state.providerOverride = null;
+    state.modelOverride = null;
+    await safeSend(ctx, state.chatId, "✅ Runtime reset. Each agent uses its own default again.");
+    return;
+  }
+
+  const provider = providers.find((p) => p.id.toLowerCase() === providerArg.toLowerCase());
+  if (!provider) {
+    await safeSend(
+      ctx,
+      state.chatId,
+      `No provider "${providerArg}". Available: ${providers.map((p) => p.id).join(", ")}`
+    );
+    return;
+  }
+
+  let model: string | null = null;
+  if (modelArg) {
+    const known = (provider.models ?? []).find(
+      (m) => m.id.toLowerCase() === modelArg.toLowerCase()
+    );
+    if (!known && (provider.models?.length ?? 0) > 0) {
+      await safeSend(
+        ctx,
+        state.chatId,
+        `No model "${modelArg}" for ${provider.id}. Models: ${provider
+          .models!.map((m) => m.id)
+          .join(", ")}`
+      );
+      return;
+    }
+    model = known?.id ?? modelArg;
+  }
+
+  state.providerOverride = provider.id;
+  state.modelOverride = model;
+  await safeSend(
+    ctx,
+    state.chatId,
+    `✅ Runtime set: ${provider.name}${model ? ` · ${model}` : ""}. Applies from your next message. /model reset to undo.`
+  );
 }
 
 // ---------------------------------------------------------------------------
@@ -437,10 +527,23 @@ async function runMessage(
       state.conversationId = null;
     }
 
+    // Per-chat runtime override (/model): wins over the persona's provider.
+    // A provider switch needs the matching default adapter; a model override
+    // rides adapterConfig (start) / the per-turn override (continue).
+    const overrideProviderId = state.providerOverride ?? undefined;
+    const overrideAdapterType = overrideProviderId
+      ? defaultAdapterTypeForProvider(overrideProviderId)
+      : undefined;
+    const overrideModel = state.modelOverride ?? undefined;
+
     const continuing = !oneShot && state.conversationId !== null;
     if (continuing) {
       conversationId = state.conversationId!;
-      runPromise = executeContinue(ctx, conversationId, cabinetPath, text, staged);
+      runPromise = executeContinue(ctx, conversationId, cabinetPath, text, staged, {
+        providerId: overrideProviderId,
+        adapterType: overrideAdapterType,
+        model: overrideModel,
+      });
     } else {
       const built = await buildManualConversationPrompt({
         agentSlug: targetSlug,
@@ -452,9 +555,11 @@ async function runMessage(
         title: built.title,
         trigger: "telegram",
         prompt: built.prompt,
-        providerId: built.providerId,
-        adapterType: built.adapterType,
-        adapterConfig: built.adapterConfig,
+        providerId: overrideProviderId ?? built.providerId,
+        adapterType: overrideAdapterType ?? built.adapterType,
+        adapterConfig: overrideModel
+          ? { ...(built.adapterConfig ?? {}), model: overrideModel }
+          : built.adapterConfig,
         cwd: built.cwd,
         cabinetPath,
         attachmentPaths: staged.length > 0 ? staged : undefined,
@@ -509,13 +614,17 @@ async function executeContinue(
   conversationId: string,
   cabinetPath: string | undefined,
   text: string,
-  staged: string[]
+  staged: string[],
+  override: { providerId?: string; adapterType?: string; model?: string } = {}
 ): Promise<{ finalText: string; failed: boolean }> {
   const meta = await continueConversationRun(conversationId, {
     userMessage: text,
     cabinetPath,
     attachmentPaths: staged.length > 0 ? staged : undefined,
     timeoutMs: GATEWAY_DEADLINE_MS, // explicit — defaults to 15 min upstream
+    providerId: override.providerId,
+    adapterType: override.adapterType,
+    model: override.model,
   });
   if (!meta) return { finalText: "Conversation not found. Send /new to start fresh.", failed: true };
   const turns = await readConversationTurns(conversationId, cabinetPath);

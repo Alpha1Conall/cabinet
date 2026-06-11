@@ -53,6 +53,12 @@ export interface ChatState {
   stagedAttachments: string[];
   /** Cached orchestrator slug for the active room; cleared on /room. */
   orchestratorSlug: string | null;
+  /**
+   * Per-chat runtime override (set via /model). Null = each agent's own
+   * persona default. Sticky across /new and /room until /model reset.
+   */
+  providerOverride: string | null;
+  modelOverride: string | null;
   /** Rolling message timestamps for the 10-per-60s rate limit. */
   recentMessageTimes: number[];
   /** Whether this denied sender already got the one refusal reply. */
@@ -75,6 +81,8 @@ export function getChatState(chatId: number): ChatState {
       queued: null,
       stagedAttachments: [],
       orchestratorSlug: null,
+      providerOverride: null,
+      modelOverride: null,
       recentMessageTimes: [],
       refusalSent: false,
     };
