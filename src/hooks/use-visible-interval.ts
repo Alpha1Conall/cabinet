@@ -24,11 +24,14 @@ export function useVisibleInterval(
   intervalMs: number,
   options: { fireOnMount?: boolean } = { fireOnMount: true }
 ): void {
-  // Pin the latest callback in a ref so the effect can stay mounted
-  // across renders without restarting the interval each time the
-  // caller passes a new closure.
+  // Pin the latest callback in a ref so the interval effect can stay
+  // mounted across renders without restarting each time the caller
+  // passes a new closure. Updated in an effect, not during render
+  // (react-hooks/refs).
   const cbRef = useRef(callback);
-  cbRef.current = callback;
+  useEffect(() => {
+    cbRef.current = callback;
+  });
 
   useEffect(() => {
     if (typeof window === "undefined") return;

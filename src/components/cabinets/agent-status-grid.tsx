@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { FolderTree } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { DepthDropdown } from "./depth-dropdown";

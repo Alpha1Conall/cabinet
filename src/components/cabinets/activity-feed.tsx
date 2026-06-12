@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { Loader2, Users, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { buildConversationInstanceKey } from "@/lib/agents/conversation-identity";
