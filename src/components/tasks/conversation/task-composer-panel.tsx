@@ -262,13 +262,13 @@ export function TaskComposerPanel({
   // Continuation turns upload directly into the existing conversation's
   // attachments dir — no staging needed. When conversationId is missing
   // (shouldn't happen for this surface), fall back to a stable random id
-  // so the hook's staging path is well-formed.
-  const clientAttachmentId = useMemo(
-    () =>
-      typeof crypto !== "undefined" && "randomUUID" in crypto
-        ? crypto.randomUUID()
-        : `c-${Date.now()}`,
-    []
+  // so the hook's staging path is well-formed. Lazy useState (not useMemo):
+  // the initializer runs once per mount, so the impure id generation never
+  // re-executes on re-render.
+  const [clientAttachmentId] = useState(() =>
+    typeof crypto !== "undefined" && "randomUUID" in crypto
+      ? crypto.randomUUID()
+      : `c-${Date.now()}`
   );
   const attachments = useComposerAttachments({
     cabinetPath,
