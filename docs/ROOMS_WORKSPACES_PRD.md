@@ -272,8 +272,9 @@ target before calling the migration complete (see §10.7).
 - **Phase 6 — Onboarding.** ✅ Shipped (creates `data/<slug>/` rooms + home marker).
 - **Migration + sibling-room model (the v3 core).** ⚠️ Shipped in shape; safety hardening / tests
   remain in §10.7.
-- **Phase 2 — Clean-path routing + section anchors.** ⏳ Planned (§11); sequenced after the §10
-  hardening so it reuses the `lastActivePath` reopen layer.
+- **Phase 2 — Clean-path routing + section anchors.** 🚧 Started (§11): the nested-cabinet reload
+  bug is fixed (marker-scan parser, 14 tests). The `/room` rename, clean-path cutover, Electron
+  serving, and section anchors remain — sequenced to reuse the `lastActivePath` reopen layer.
 
 ---
 
@@ -283,6 +284,15 @@ The stale-room-list and display-name rename regressions from 2026-05-27 have sin
 implemented in the current tree (dropdown refetch, focus/BroadcastChannel refresh, atomic manifest
 writes, cache invalidation, inline errors). Keep them as regression-test targets, not primary design
 gaps. The remaining work below is the shipping contract for the rooms model.
+
+> **Implementation status (2026-06-13, branch `feat/rooms-hardening`).** Shipped + tested this pass:
+> **§10.1 fail-closed search** (verified cross-room leak closed; 5 unit tests + API E2E) and
+> **§10.5 reopen-to-last-path** (`lastActivePath` + resolver + `POST /api/rooms/active`; E2E). Already
+> in the tree from prior work: **§10.3 delete** (lib + `DELETE /api/rooms` + slug-confirm UI +
+> cross-window invalidation) and **§10.4 rename**. Also fixed: the nested-cabinet **reload bug**
+> (§11 marker-scan parser, 14 tests). Still open: **§10.2 per-room chat** (needs a `cabinet_path`
+> column + per-room `.chat/`), **§10.3 refinements** (commit-on-delete, stop scoped jobs/chats), and
+> the rest of the **§11** clean-path cutover.
 
 ### 10.1 Search must fail closed to a room
 
