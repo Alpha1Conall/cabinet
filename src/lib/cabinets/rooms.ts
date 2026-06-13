@@ -1,7 +1,9 @@
 import fs from "fs/promises";
 import path from "path";
 import yaml from "js-yaml";
+import simpleGit from "simple-git";
 import { DATA_DIR } from "@/lib/storage/path-utils";
+import { fileExists } from "@/lib/storage/fs-operations";
 import { CABINET_MANIFEST_FILE } from "@/lib/cabinets/files";
 import { ROOT_CABINET_PATH, normalizeCabinetPath } from "@/lib/cabinets/paths";
 
@@ -423,15 +425,39 @@ export async function deleteRoom(cabinetPath: string): Promise<DeleteRoomResult>
 
   await fs.rename(dir, finalTarget);
 
-  // Repoint home.json if the deleted slug was the default or last-active.
+  // Repoint home.json if the deleted slug was the default / last-active /
+  // owner of the last-active path (§10.3 step 8, §10.5).
   const home = await getHomeConfig();
   const patch: Partial<HomeConfig> = {};
   const nextDefault = remaining[0].path;
   if (home.defaultRoom === normalized) patch.defaultRoom = nextDefault;
   if (home.lastActiveRoom === normalized) patch.lastActiveRoom = nextDefault;
+  const lapRoom = home.lastActivePath ? home.lastActivePath.split("/")[0] : null;
+  if (lapRoom === normalized) patch.lastActivePath = null;
   const homeConfigUpdated = Object.keys(patch).length > 0;
   if (homeConfigUpdated) {
     await patchHomeConfig(patch);
+  }
+
+  // Best-effort scoped git checkpoint of the deletion (§10.3): stage ONLY the
+  // moved room + its trash target + home config — never `git add .`, so
+  // unrelated dirty files are left alone. The soft-delete already moved the
+  // directory, so any git failure here is non-fatal (recoverable from .trash).
+  try {
+    if (await fileExists(path.join(DATA_DIR, ".git"))) {
+      const git = simpleGit(DATA_DIR);
+      await git.raw([
+        "add",
+        "--all",
+        "--",
+        normalized,
+        path.relative(DATA_DIR, finalTarget),
+        path.join(".home", "home.json"),
+      ]);
+      await git.commit(`delete room ${slug}`);
+    }
+  } catch {
+    // non-fatal — the room directory is already safely in .trash/
   }
 
   return {

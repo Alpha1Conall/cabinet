@@ -322,6 +322,13 @@ cross-room path.
 
 ### 10.2 Chat storage is per-room
 
+**Status (2026-06-13): ⏳ DEFERRED (documented gap).** Scoping the chat is larger than it looks: it
+is the live agent-messaging system (`chat-io` + `slack-manager` + `/api/agents/slack` + `SlackPanel`
++ heartbeat posting), so per-room scoping means threading `cabinetPath` through the agent-heartbeat
+path — a broad change to working behavior, best done as its own verified pass (it can't be exercised
+without triggering agent runs). Chat remains global for now; do not build new product behavior on the
+global store meanwhile.
+
 **Decision.** Even though team chat is not currently obvious in the UI, chat data belongs to the
 room. There is no product-level global chat in this pass.
 
@@ -334,6 +341,13 @@ room. There is no product-level global chat in this pass.
    migration and room labelling.
 
 ### 10.3 Delete room is soft-delete plus scoped commits
+
+**Status (2026-06-13): ✅ Mostly done.** Soft-delete to `data/.trash/<slug>-<ts>/`, guard rails
+(home/non-direct-child/non-room/last-room), slug-typed confirm UI, `home.json` repoint (now incl.
+`lastActivePath`), and cross-window `rooms:invalidated` were already in; this pass adds the
+**scoped git checkpoint** on delete (stages only the room + trash + `home.json`, never `git add .`).
+⏳ Remaining sub-item: best-effort **stop of running jobs/chats/agent sessions** scoped to the room
+(cross-process daemon coordination) — tracked with §10.2's agent-messaging work.
 
 **Decision.** Room deletion moves the room to trash first; it does not immediately `rm -rf` user
 data. This makes first-release delete recoverable by hand and gives support a clear escape hatch.
