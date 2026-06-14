@@ -1,7 +1,7 @@
 import { spawn } from "child_process";
 import { NextResponse } from "next/server";
 import { providerRegistry } from "@/lib/agents/provider-registry";
-import { getAdapterRuntimePath } from "@/lib/agents/adapters/utils";
+import { withAdapterRuntimeEnv } from "@/lib/agents/adapters/utils";
 import {
   getConfiguredDefaultProviderId,
   readProviderSettings,
@@ -198,10 +198,10 @@ function runShellCommand(command: string): Promise<{
   spawnError: string | null;
 }> {
   return new Promise((resolve) => {
-    const env = {
-      ...process.env,
-      PATH: getAdapterRuntimePath(),
-    };
+    // withAdapterRuntimeEnv merges .cabinet.env and sets PATH via the adapter
+    // runtime path (#108); the Windows branch runs through the shell since
+    // there's no /bin/sh on Windows (#130/#93).
+    const env = withAdapterRuntimeEnv(process.env);
     const child =
       process.platform === "win32"
         ? spawn(command, {
