@@ -124,9 +124,10 @@ export function expectedToken(): Promise<string> {
  * disabled, so callers can spread it unconditionally and send nothing.
  *
  * Uses the memoized expectedToken(), so PBKDF2 is paid once per process even
- * though every trigger calls this. The CALLER must make KB_PASSWORD and (when
- * generated) CABINET_AUTH_SALT visible in process.env first -- this module only
- * reads env, it never loads .env / .cabinet.env.
+ * though every trigger calls this. The CALLER must make every derivation input
+ * (KB_PASSWORD, CABINET_AUTH_SALT, and any CABINET_LOGIN_PBKDF2_ITERS override)
+ * visible in process.env first -- this module only reads env, it never loads
+ * .env / .cabinet.env. Any input that differs from the gate's silently 401s.
  */
 export async function authCookieHeader(): Promise<Record<string, string>> {
   if (!isAuthEnabled()) return {};
