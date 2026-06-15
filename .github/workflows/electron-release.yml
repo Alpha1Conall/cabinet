@@ -1,16 +1,19 @@
 name: Electron Release (manual)
 
-# Triggered manually after npm publish + smoke tests pass.
-# macOS job: builds, signs, notarizes, and publishes the Cabinet Electron app.
-# Windows job: builds the ZIP + Squirrel installer via electron:make:win and
-# attaches them to the release. Both target the existing GitHub release for the tag.
+# Triggered manually. Two modes:
+#  * RELEASE  — dispatch with a `tag` (e.g. v0.4.0): macOS job signs/notarizes/
+#    publishes; Windows job builds and attaches artifacts to that release.
+#  * VALIDATE — dispatch with NO tag (against a branch): macOS job is skipped,
+#    the Windows job builds the current branch and only uploads the build as a
+#    run artifact (no release writes). Used to smoke-test the Windows packaging
+#    of a branch/PR before merging.
 
 on:
   workflow_dispatch:
     inputs:
       tag:
-        description: 'Release tag to build (e.g., v0.4.0)'
-        required: true
+        description: 'Release tag to build (e.g., v0.4.0). Leave empty to validate the selected branch without publishing.'
+        required: false
         type: string
 
 permissions:
@@ -20,6 +23,9 @@ permissions:
 jobs:
   electron-macos:
     runs-on: macos-latest
+    # Release-only: this job signs, notarizes and publishes, so never run it for
+    # a branch validation (no tag).
+    if: ${{ inputs.tag != '' }}
     steps:
       - name: Checkout tag
         uses: actions/checkout@v4
@@ -66,10 +72,11 @@ jobs:
   electron-windows:
     runs-on: windows-latest
     steps:
-      - name: Checkout tag
+      # With a tag -> build that release; without -> build the dispatched branch.
+      - name: Checkout
         uses: actions/checkout@v4
         with:
-          ref: ${{ inputs.tag }}
+          ref: ${{ inputs.tag || github.ref }}
 
       - name: Setup Node
         uses: actions/setup-node@v4
@@ -91,11 +98,13 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: cabinet-windows-${{ inputs.tag }}
+          name: cabinet-windows-${{ inputs.tag || github.sha }}
           path: out/make/**
           if-no-files-found: warn
 
+      # Release-only: only attach to a GitHub release when a tag was given.
       - name: Attach Windows artifacts to the GitHub release
+        if: ${{ inputs.tag != '' }}
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         shell: bash
