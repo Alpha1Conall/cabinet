@@ -37,6 +37,16 @@ export function IntegrationDetailPage({
 }) {
   const category = CATEGORY_META[item.category].label;
   const entry = getCatalogEntry(item.id);
+  // Microsoft 365 has a personal/work toggle in the ConnectPanel; we lift it
+  // here so the left-hand setup guide can react to it (personal = no setup).
+  const isM365 = item.id === "microsoft-365";
+  const [msMode, setMsMode] = useState<"personal" | "work">("personal");
+  const m365Personal = isM365 && msMode === "personal";
+  // Personal Microsoft accounts have no Teams or SharePoint (work/school only),
+  // so trim the capability list to what actually applies.
+  const agentActions = m365Personal
+    ? ["Outlook mail & calendar", "OneDrive files"]
+    : item.actions;
 
   return (
     <div className="h-full overflow-y-auto bg-background">
@@ -96,7 +106,7 @@ export function IntegrationDetailPage({
             What your agents can do
           </h2>
           <ul className="mt-4 space-y-3">
-            {item.actions.map((action) => (
+            {agentActions.map((action) => (
               <li key={action} className="flex items-start gap-3">
                 <span
                   className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full"
@@ -108,8 +118,30 @@ export function IntegrationDetailPage({
               </li>
             ))}
           </ul>
+          {m365Personal && (
+            <p className="mt-3 text-[12px] text-muted-foreground">
+              Teams &amp; SharePoint need a work or school account — switch to{" "}
+              <span className="font-medium text-foreground">Work / school app</span>{" "}
+              to use those.
+            </p>
+          )}
 
-          {entry?.setupSteps?.length ? (
+          {m365Personal ? (
+            <div className="mt-8 rounded-xl border border-border bg-card/50 p-4">
+              <div className="flex items-center gap-2 text-[13px] font-medium text-foreground">
+                <ShieldCheck className="h-4 w-4 text-emerald-500" />
+                No setup needed
+              </div>
+              <p className="mt-1.5 text-[13px] leading-relaxed text-muted-foreground">
+                Personal accounts sign in straight with Microsoft — click{" "}
+                <span className="font-medium text-foreground">Sign in with Microsoft</span>,
+                enter the code shown, and approve in your browser. No Azure setup
+                needed. Choose{" "}
+                <span className="font-medium text-foreground">Work / school app</span>{" "}
+                if you need to use your organization&apos;s Azure app registration.
+              </p>
+            </div>
+          ) : entry?.setupSteps?.length ? (
             <SetupGuide
               steps={entry.setupSteps}
               brand={item.brand}
@@ -130,7 +162,7 @@ export function IntegrationDetailPage({
         {/* Right: config / status panel */}
         <aside>
           {item.implemented ? (
-            <ConnectPanel item={item} />
+            <ConnectPanel item={item} msMode={msMode} onMsModeChange={setMsMode} />
           ) : (
             <div className="rounded-2xl border border-dashed border-border bg-card/40 p-5 text-center">
               <div
