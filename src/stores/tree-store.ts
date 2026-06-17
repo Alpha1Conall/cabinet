@@ -16,10 +16,6 @@ export type DragZone = "before" | "into" | "after";
 interface TreeState {
   nodes: TreeNode[];
   selectedPath: string | null;
-  /** The Drive node currently selected, when it's not in the local tree. */
-  driveNode: TreeNode | null;
-  /** True while a Drive file is loading after being clicked. */
-  driveLoading: boolean;
   expandedPaths: Set<string>;
   loading: boolean;
   dragOverPath: string | null;
@@ -28,10 +24,13 @@ interface TreeState {
   showHiddenFiles: boolean;
   /** Bumped whenever we want the sidebar to scroll to + blink the selected row. */
   focusTick: number;
+  /** Tree paths an agent task recently created/changed — highlighted in the
+   *  sidebar (tint + dot) until the user opens them. */
+  recentlyChanged: Set<string>;
 
-  setDriveNode: (node: TreeNode | null) => void;
-  setDriveLoading: (loading: boolean) => void;
-  loadTree: () => Promise<void>;
+  /** Reload the file tree. Pass `{ fresh: true }` to bypass the server's
+   *  short-TTL cache — needed right after an agent task writes files. */
+  loadTree: (opts?: { fresh?: boolean }) => Promise<void>;
   selectPage: (path: string | null) => void;
   /** Expand all ancestor paths, select the leaf, and bump focusTick. */
   focusPath: (path: string) => void;
@@ -48,6 +47,10 @@ interface TreeState {
   setDragOver: (path: string | null, zone?: DragZone | null) => void;
   setShowHiddenFiles: (show: boolean) => void;
   toggleHiddenFiles: () => void;
+  /** Mark tree paths as recently changed by a task (sidebar highlight + dot). */
+  markChanged: (paths: string[]) => void;
+  /** Clear the "recently changed" mark for one path (e.g. when it's opened). */
+  clearChanged: (path: string) => void;
 }
 
 const TREE_CACHE_KEY = "kb-tree-cache";
@@ -104,10 +107,6 @@ function saveCachedTree(nodes: TreeNode[], showHidden: boolean) {
 export const useTreeStore = create<TreeState>((set, get) => ({
   nodes: [],
   selectedPath: null,
-  driveNode: null,
-  driveLoading: false,
-  setDriveNode: (node) => set({ driveNode: node }),
-  setDriveLoading: (loading) => set({ driveLoading: loading }),
   expandedPaths: loadExpandedPaths(),
   loading: false,
   dragOverPath: null,
@@ -115,8 +114,9 @@ export const useTreeStore = create<TreeState>((set, get) => ({
   movingPaths: new Set<string>(),
   showHiddenFiles: loadShowHiddenFiles(),
   focusTick: 0,
+  recentlyChanged: new Set<string>(),
 
-  loadTree: async () => {
+  loadTree: async (opts) => {
     const { showHiddenFiles, nodes: existing } = get();
     // Paint instantly from cache on first load, then revalidate in the
     // background. Keeps the sidebar from flashing empty on refresh.
@@ -129,7 +129,7 @@ export const useTreeStore = create<TreeState>((set, get) => ({
       }
     }
     try {
-      const nodes = await fetchTree(showHiddenFiles);
+      const nodes = await fetchTree(showHiddenFiles, opts?.fresh ?? false);
       set({ nodes, loading: false });
       saveCachedTree(nodes, showHiddenFiles);
     } catch {
@@ -139,6 +139,22 @@ export const useTreeStore = create<TreeState>((set, get) => ({
 
   selectPage: (path: string | null) => {
     set({ selectedPath: path });
+    if (path) get().clearChanged(path);
+  },
+
+  markChanged: (paths: string[]) => {
+    const cur = get().recentlyChanged;
+    const next = new Set(cur);
+    for (const p of paths) if (p) next.add(p);
+    if (next.size !== cur.size) set({ recentlyChanged: next });
+  },
+
+  clearChanged: (path: string) => {
+    const cur = get().recentlyChanged;
+    if (!cur.has(path)) return;
+    const next = new Set(cur);
+    next.delete(path);
+    set({ recentlyChanged: next });
   },
 
   focusPath: (path: string) => {
