@@ -282,7 +282,7 @@ export function GoogleDriveSection() {
       <div>
         <h3 className="text-[14px] font-semibold mb-1">Google Drive</h3>
         <p className="text-[12px] text-muted-foreground">
-          Mount folders from Google Drive for Desktop. Files appear in the sidebar under a separate Google Drive section and are fully accessible to agents.
+          Mount folders from Google Drive for Desktop. Files appear inline in the sidebar file tree alongside your local documents and are fully accessible to agents.
         </p>
       </div>
 
