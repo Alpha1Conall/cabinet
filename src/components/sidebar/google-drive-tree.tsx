@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState, useCallback, useRef } from "react";
-import { Cloud, ChevronRight, ChevronDown, RefreshCw, Settings, Folder, Loader2, FolderOpen, ClipboardCopy } from "lucide-react";
+import { Cloud, ChevronRight, ChevronDown, Folder, Loader2, FolderOpen, ClipboardCopy } from "lucide-react";
 import { useAppStore } from "@/stores/app-store";
 import { useTreeStore } from "@/stores/tree-store";
 import type { TreeNode, GoogleDriveSection } from "@/types";
@@ -18,6 +18,9 @@ const DRIVE_CACHE_KEY = "gdrive-tree-cache";
 const DRIVE_EXPANDED_KEY = "gdrive-expanded-paths";
 // 60-second TTL for Drive tree
 const CACHE_TTL_MS = 60_000;
+// Fired by the Drive settings UI after a folder is mounted/unmounted so the
+// sidebar refetches immediately instead of waiting out the cache TTL.
+export const GDRIVE_MOUNTS_CHANGED_EVENT = "cabinet:gdrive-mounts-changed";
 
 function loadExpandedPaths(): Set<string> {
   try {
@@ -173,11 +176,9 @@ interface GoogleDriveTreeSectionProps {
 }
 
 export function GoogleDriveTreeSection({ depth, padFn }: GoogleDriveTreeSectionProps) {
-  const setSection = useAppStore((s) => s.setSection);
   const [sections, setSections] = useState<GoogleDriveSection[]>([]);
   const [sectionExpanded, setSectionExpanded] = useState<Record<string, boolean>>({});
   const [expandedPaths, setExpandedPaths] = useState<Set<string>>(loadExpandedPaths);
-  const [refreshing, setRefreshing] = useState(false);
   const lastFetchRef = useRef<number>(0);
 
   const fetchDriveTree = useCallback(async (force = false) => {
@@ -219,14 +220,14 @@ export function GoogleDriveTreeSection({ depth, padFn }: GoogleDriveTreeSectionP
     void fetchDriveTree();
   }, [fetchDriveTree]);
 
-  const refresh = async () => {
-    setRefreshing(true);
-    try {
-      await fetchDriveTree(true);
-    } finally {
-      setRefreshing(false);
-    }
-  };
+  // Mounting/unmounting a folder in settings fires this; force a refetch
+  // (bypassing the cache TTL) so the change shows up without a reload.
+  useEffect(() => {
+    const onMountsChanged = () => void fetchDriveTree(true);
+    window.addEventListener(GDRIVE_MOUNTS_CHANGED_EVENT, onMountsChanged);
+    return () =>
+      window.removeEventListener(GDRIVE_MOUNTS_CHANGED_EVENT, onMountsChanged);
+  }, [fetchDriveTree]);
 
   const togglePath = (path: string) => {
     setExpandedPaths((prev) => {
@@ -241,34 +242,9 @@ export function GoogleDriveTreeSection({ depth, padFn }: GoogleDriveTreeSectionP
   if (sections.length === 0) return null;
 
   return (
-    <div className="mt-2">
-      {/* Section divider */}
-      <div className="flex items-center gap-1.5 px-2 py-1 mb-0.5" style={padFn(0)}>
-        <div className="h-px flex-1 bg-border/60" />
-        <span className="text-[9px] font-semibold uppercase tracking-wider text-muted-foreground/50 flex items-center gap-1">
-          <Cloud className="h-2.5 w-2.5" />
-          Google Drive
-        </span>
-        <div className="h-px flex-1 bg-border/60" />
-        <button
-          type="button"
-          title="Refresh Google Drive"
-          onClick={refresh}
-          className="text-muted-foreground/40 hover:text-muted-foreground transition-colors"
-        >
-          <RefreshCw className={cn("h-2.5 w-2.5", refreshing && "animate-spin")} />
-        </button>
-        <button
-          type="button"
-          title="Manage Google Drive"
-          onClick={() => setSection({ type: "settings", slug: "integrations" })}
-          className="text-muted-foreground/40 hover:text-muted-foreground transition-colors"
-        >
-          <Settings className="h-2.5 w-2.5" />
-        </button>
-      </div>
-
-      {/* One block per mount */}
+    <div>
+      {/* Mounted Drive folders render inline with the cabinet files — each
+          mount is a collapsible folder, set apart only by the cloud glyph. */}
       {sections.map((section) => {
         const expanded = sectionExpanded[section.mountId] ?? true;
         const mountChildrenId = `gdrive-mount-${section.mountId.replace(/[^a-z0-9]/gi, "-")}`;

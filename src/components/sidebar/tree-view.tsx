@@ -836,6 +836,15 @@ export function TreeView() {
                     />
                   ))
                 )}
+                {/* Mounted Drive folders flow inline right after the cabinet
+                    files. Rendered inside SidebarSearch so they sit with the
+                    file list rather than below its flex-1 slack (which would
+                    pin them to the bottom when collapsed). stopPropagation keeps
+                    a right-click on a Drive node from also opening the cabinet
+                    context menu. */}
+                <div onContextMenu={(e) => e.stopPropagation()}>
+                  <GoogleDriveTreeSection depth={1} padFn={pad} itemClass={itemClass} />
+                </div>
               </SidebarSearch>
                   </div>
                 </ContextMenuTrigger>
@@ -881,9 +890,6 @@ export function TreeView() {
                 </ContextMenuContent>
               </ContextMenu>
             )}
-            {/* Google Drive section lives OUTSIDE the cabinet ContextMenuTrigger
-                so right-clicking Drive nodes doesn't bubble up to the cabinet menu. */}
-            <GoogleDriveTreeSection depth={1} padFn={pad} itemClass={itemClass} />
           </div>
         )}
       </div>

@@ -23,6 +23,7 @@ import {
   DialogTitle,
   DialogFooter,
 } from "@/components/ui/dialog";
+import { GDRIVE_MOUNTS_CHANGED_EVENT } from "@/components/sidebar/google-drive-tree";
 
 interface Mount {
   id: string;
@@ -225,6 +226,7 @@ export function GoogleDriveSection() {
       throw new Error(data.error ?? `Server error ${res.status}`);
     }
     await loadStatus();
+    window.dispatchEvent(new Event(GDRIVE_MOUNTS_CHANGED_EVENT));
     window.dispatchEvent(
       new CustomEvent("cabinet:toast", {
         detail: { kind: "success", message: `Mounted "${folderName}"` },
@@ -246,6 +248,7 @@ export function GoogleDriveSection() {
         return;
       }
       await loadStatus();
+      window.dispatchEvent(new Event(GDRIVE_MOUNTS_CHANGED_EVENT));
       window.dispatchEvent(
         new CustomEvent("cabinet:toast", {
           detail: { kind: "info", message: `Removed "${name}"` },
