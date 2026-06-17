@@ -31,6 +31,15 @@ function loadExpandedPaths(): Set<string> {
   }
 }
 
+function loadCachedSections(): GoogleDriveSection[] {
+  try {
+    const cached = localStorage.getItem(DRIVE_CACHE_KEY);
+    return cached ? (JSON.parse(cached) as GoogleDriveSection[]) : [];
+  } catch {
+    return [];
+  }
+}
+
 function saveExpandedPaths(paths: Set<string>) {
   try {
     localStorage.setItem(DRIVE_EXPANDED_KEY, JSON.stringify([...paths]));
@@ -176,7 +185,7 @@ interface GoogleDriveTreeSectionProps {
 }
 
 export function GoogleDriveTreeSection({ depth, padFn }: GoogleDriveTreeSectionProps) {
-  const [sections, setSections] = useState<GoogleDriveSection[]>([]);
+  const [sections, setSections] = useState<GoogleDriveSection[]>(loadCachedSections);
   const [sectionExpanded, setSectionExpanded] = useState<Record<string, boolean>>({});
   const [expandedPaths, setExpandedPaths] = useState<Set<string>>(loadExpandedPaths);
   const lastFetchRef = useRef<number>(0);
@@ -184,17 +193,6 @@ export function GoogleDriveTreeSection({ depth, padFn }: GoogleDriveTreeSectionP
   const fetchDriveTree = useCallback(async (force = false) => {
     const now = Date.now();
     if (!force && now - lastFetchRef.current < CACHE_TTL_MS) return;
-
-    // Paint from cache immediately
-    if (sections.length === 0) {
-      try {
-        const cached = localStorage.getItem(DRIVE_CACHE_KEY);
-        if (cached) {
-          const parsed = JSON.parse(cached) as GoogleDriveSection[];
-          setSections(parsed);
-        }
-      } catch { /* ignore */ }
-    }
 
     try {
       const res = await fetch("/api/google-drive/tree", { cache: "no-store" });
@@ -214,7 +212,7 @@ export function GoogleDriveTreeSection({ depth, padFn }: GoogleDriveTreeSectionP
         localStorage.setItem(DRIVE_CACHE_KEY, JSON.stringify(data.sections));
       } catch { /* ignore */ }
     } catch { /* ignore */ }
-  }, [sections.length]);
+  }, []);
 
   useEffect(() => {
     void fetchDriveTree();
