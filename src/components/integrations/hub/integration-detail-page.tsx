@@ -49,6 +49,9 @@ export function IntegrationDetailPage({
   const agentActions = m365Personal
     ? ["Outlook mail & calendar", "OneDrive files"]
     : item.actions;
+  // MCP connectors get setup steps from the catalog; native integrations carry
+  // their own on the catalog item.
+  const setupSteps = entry?.setupSteps ?? item.setupSteps;
 
   return (
     <div className="h-full overflow-y-auto bg-background">
@@ -143,17 +146,19 @@ export function IntegrationDetailPage({
                 if you need to use your organization&apos;s Azure app registration.
               </p>
             </div>
-          ) : entry?.setupSteps?.length ? (
+          ) : setupSteps?.length ? (
             <SetupGuide
-              steps={entry.setupSteps}
+              steps={setupSteps}
               brand={item.brand}
               art={stepArtFor({
                 id: item.id,
                 label: item.name,
                 brand: item.brand,
-                authBackend: entry.authBackend,
-                transport: entry.transport,
-                hasUrlCredential: !!entry.urlCredentialKey,
+                // Native integrations have no MCP catalog entry; stepArtFor
+                // matches them by id (e.g. google-drive) before these fields.
+                authBackend: entry?.authBackend ?? "",
+                transport: entry?.transport ?? "",
+                hasUrlCredential: !!entry?.urlCredentialKey,
               })}
             />
           ) : null}
