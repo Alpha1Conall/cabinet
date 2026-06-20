@@ -579,7 +579,9 @@ IMPORTANT: You may think or check files first, but put ONLY your final reply to 
     startConversationRun({
       agentSlug: slug,
       title: `${persona.name} · reply in #${channel}`,
-      trigger: "manual",
+      // Channel @mention replies are transient — not user tasks. Tag them so the
+      // Tasks panel can hide them (see listConversationMetas).
+      trigger: "channel",
       prompt,
       adapterType: persona.adapterType || defaultAdapterTypeForProvider(providerId),
       adapterConfig: persona.adapterConfig,
