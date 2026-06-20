@@ -194,6 +194,7 @@ export async function readPage(virtualPath: string): Promise<PageData> {
         order: data.order,
         dir: data.dir,
         google: data.google,
+        appleNotes: data.appleNotes,
       },
     };
   }

@@ -29,6 +29,7 @@ import { LinkRepoDialog } from "./link-repo-dialog";
 import { ConnectDriveDialog } from "./connect-drive-dialog";
 import { ConnectKnowledgeDialog } from "./connect-knowledge-dialog";
 import { NotionConnectDialog } from "./notion-connect-dialog";
+import { AppleNotesConnectDialog } from "./apple-notes-connect-dialog";
 import type { KnowledgeProviderId } from "@/lib/knowledge-sources/store";
 import { NewFileDialog } from "./new-file-dialog";
 import { MoveToDialog } from "./move-to-dialog";
@@ -158,6 +159,7 @@ export function TreeView() {
   const [connectDriveOpen, setConnectDriveOpen] = useState(false);
   const [connectKnowledgeOpen, setConnectKnowledgeOpen] = useState(false);
   const [notionConnectOpen, setNotionConnectOpen] = useState(false);
+  const [appleNotesConnectOpen, setAppleNotesConnectOpen] = useState(false);
   const [driveProvider, setDriveProvider] = useState<KnowledgeProviderId>("google-drive");
   const [newFileOpen, setNewFileOpen] = useState(false);
   const [moveToOpen, setMoveToOpen] = useState(false);
@@ -970,11 +972,18 @@ export function TreeView() {
         setConnectDriveOpen(true);
       }}
       onNotion={() => setNotionConnectOpen(true)}
+      onAppleNotes={() => setAppleNotesConnectOpen(true)}
     />
 
     <NotionConnectDialog
       open={notionConnectOpen}
       onOpenChange={setNotionConnectOpen}
+      targetPath={dataRootPath}
+    />
+
+    <AppleNotesConnectDialog
+      open={appleNotesConnectOpen}
+      onOpenChange={setAppleNotesConnectOpen}
       targetPath={dataRootPath}
     />
 
